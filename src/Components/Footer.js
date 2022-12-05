@@ -7,11 +7,19 @@ const Footer = () => {
             <a
               href="https://www.linkedin.com/in/gavafue/"
               rel="noopener noreferrer"
-            >Linkedin</a>
+            >
+              Linkedin
+            </a>
           </li>
-          <li><a href="https://github.com/gavafue" rel="noopener noreferrer">Github</a></li>
+          <li>
+            <a href="https://github.com/gavafue" rel="noopener noreferrer">
+              Github
+            </a>
+          </li>
           <li>gavf.vazquez@gmail.com</li>
-          <li>Gabiflix</li>
+          <li>
+            <p>Gabiflix</p>
+          </li>
         </ul>
       </nav>
     </footer>

@@ -2,9 +2,12 @@ import axios from "axios";
 import React from "react";
 import swAlert from "@sweetalert/with-react";
 import { useNavigate } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Container from "react-bootstrap/Container";
 
 const Login = () => {
-const navigate = useNavigate()
+  const navigate = useNavigate();
   const submitHandler = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
@@ -41,22 +44,34 @@ const navigate = useNavigate()
   };
   return (
     <>
+      
+      <Container style={{ width: "50%" }}>
       <h2>Login form</h2>
-      <form onSubmit={submitHandler}>
-        <label>
-          <span>Email</span>
-          <br />
-          <input type="text" name="email"></input>
-        </label>
-        <br />
-        <label>
-          <span>Password</span>
-          <br />
-          <input type="password" name="password"></input>
-        </label>
-        <br />
-        <button type="submit">Log in</button>
-      </form>
+        <Form onSubmit={submitHandler}>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Email address</Form.Label>
+            <Form.Control name="email" type="text" placeholder="Enter email" />
+            <Form.Text className="text-muted">
+              We'll never share your email with anyone else.
+            </Form.Text>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              name="password"
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicCheckbox">
+            <Form.Check type="checkbox" label="Check me out" />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </Container>
     </>
   );
 };
