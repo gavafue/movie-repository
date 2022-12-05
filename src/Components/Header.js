@@ -5,7 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 
 const Header = () => {
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="dark" variant="dark" expand="lg">
       <Container fluid>
         <Navbar.Brand>Gabiflix</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
