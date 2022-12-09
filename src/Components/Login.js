@@ -5,9 +5,10 @@ import { useNavigate, Navigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
+import Alert from "react-bootstrap/Alert";
 const Login = () => {
   const navigate = useNavigate();
-  let token = localStorage.getItem("token");
+  let token = sessionStorage.getItem("token");
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -39,7 +40,7 @@ const Login = () => {
           icon: "success",
         });
         const tokenReceived = res.data.token;
-        localStorage.setItem("token", tokenReceived);
+        sessionStorage.setItem("token", tokenReceived);
         navigate("/list");
       });
   };
@@ -75,6 +76,10 @@ const Login = () => {
             Submit
           </Button>
         </Form>
+        <Alert variant="secondary">
+          If you want to try the aplication, use the following credentials: Email:
+         email: challenge@alkemy.org || Password: react
+        </Alert>
       </Container>
     );
   }

@@ -42,8 +42,8 @@ const Routes = () => {
               <Card.Body>
                 <Card.Title>{oneMovie.title}</Card.Title>
                 <Card.Text>{oneMovie.overview.substring(0, 100)}...</Card.Text>
-                <Link to={`/details?movieID=${oneMovie.id}`}>
-                  <Button variant="primary">View detail</Button>
+                <Link className="text-center"to={`/details?movieID=${oneMovie.id}`}>
+                  <Button className="text-center" variant="secondary">View details</Button>
                 </Link>
               </Card.Body>
             </Card>
