@@ -1,10 +1,11 @@
 import Row from "react-bootstrap/Row";
+import React from "react";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import swAlert from "@sweetalert/with-react";
+import swAlert from "sweetalert2";
 import { Link } from "react-router-dom";
 
 const Routes = () => {
@@ -33,7 +34,7 @@ const Routes = () => {
     <Row>
       {movieList.map((oneMovie, index) => {
         return (
-          <Col xs={3}>
+          <Col xs={6} md={4} lg={3}>
             <Card key={index} id={index}>
               <Card.Img
                 variant="top"
@@ -41,9 +42,14 @@ const Routes = () => {
               />
               <Card.Body>
                 <Card.Title>{oneMovie.title}</Card.Title>
-                <Card.Text>{oneMovie.overview.substring(0, 100)}...</Card.Text>
-                <Link className="text-center"to={`/details?movieID=${oneMovie.id}`}>
-                  <Button className="text-center" variant="secondary">View details</Button>
+                <Card.Text>{oneMovie.overview.substring(0, 110)}...</Card.Text>
+                <Link
+                  className="text-center"
+                  to={`/details?movieID=${oneMovie.id}`}
+                >
+                  <Button className="text-center" variant="secondary">
+                    View details
+                  </Button>
                 </Link>
               </Card.Body>
             </Card>

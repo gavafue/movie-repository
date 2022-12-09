@@ -1,4 +1,5 @@
 import Alert from "react-bootstrap/Alert";
+import React from "react";
 const PageNotFound = () => {
   return (
     <Alert variant="danger">

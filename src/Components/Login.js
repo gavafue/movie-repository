@@ -1,11 +1,13 @@
 import axios from "axios";
 import React from "react";
-import swAlert from "@sweetalert/with-react";
+import swAlert from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import { useNavigate, Navigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
+const MySwal = withReactContent(swAlert);
 const Login = () => {
   const navigate = useNavigate();
   let token = sessionStorage.getItem("token");
@@ -14,30 +16,43 @@ const Login = () => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    const regexEmail = // eslint-disable-next-line
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    // eslint-disable-next-line
+    const regexEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     if (email === "" || password === "") {
-      swAlert("The input can not be empty");
+      MySwal.fire({
+        icon: "info",
+        title: "Oops...",
+        text: "The inputs can not be empty!.",
+      });
       return;
     }
 
     if (email !== "" && !regexEmail.test(email)) {
-      swAlert("This mail is invalid");
+      MySwal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "The email format is invalid!",
+      });
       return;
     }
 
     if (email !== "challenge@alkemy.org" || password !== "react") {
-      swAlert("Email or password were not correct");
+      MySwal.fire({
+        icon: "error",
+        title: "Ooops!...",
+        text: "The credentials are not valid! Check it and try again",
+        footer: '<a href="">Recover your password?</a>',
+      });
       return;
     }
     axios
       .post("http://challenge-react.alkemy.org", { email, password })
       .then((res) => {
-        swAlert({
-          title: "Good job!",
-          text: "You're in!",
+        MySwal.fire({
           icon: "success",
+          title: "Done",
+          text: "You are in!",
         });
         const tokenReceived = res.data.token;
         sessionStorage.setItem("token", tokenReceived);
@@ -77,8 +92,8 @@ const Login = () => {
           </Button>
         </Form>
         <Alert variant="secondary">
-          If you want to try the aplication, use the following credentials: Email:
-         email: challenge@alkemy.org || Password: react
+          If you want to try the aplication, use the following credentials:
+          Email: email: challenge@alkemy.org || Password: react
         </Alert>
       </Container>
     );

@@ -1,10 +1,14 @@
 import axios from "axios";
+import React from "react";
 import { useEffect, useState } from "react";
-import swAlert from "@sweetalert/with-react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import swAlert from "sweetalert2";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
+
 const MovieDetails = () => {
   const [movieDetailsData, setMovieDetailsData] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [productors, setProductors] = useState([]);
+  const [countries, setCountries] = useState([]);
   useEffect(() => {
     let query = new URLSearchParams(window.location.search);
     let movieID = query.get("movieID");
@@ -18,6 +22,14 @@ const MovieDetails = () => {
         setMovieDetailsData(data);
         const genresList = data.genres.map((genre) => genre.name);
         setGenres(genresList);
+        const producersList = data.production_companies.map(
+          (productor) => productor.name
+        );
+        setProductors(producersList);
+        const filmedCountriesList = data.production_countries.map(
+          (country) => country.name
+        );
+        setCountries(filmedCountriesList);
       })
       .catch((error) =>
         swAlert({
@@ -49,10 +61,24 @@ const MovieDetails = () => {
                 </Card>
               </Col>
               <Col>
-                <Row>Sinopsis: {movieDetailsData.overview}</Row>
-                <Row>Release Date: {movieDetailsData.release_date}</Row>
-                <Row>Genres: {genres.join(", ")}.</Row>
-                <Row>Popularity: {movieDetailsData.popularity}</Row>
+                <Row>
+                  <Row>Sinopsis: {movieDetailsData.overview}</Row>
+                  <Row>Release Date: {movieDetailsData.release_date}</Row>
+                  <Row>Genres: {genres.join(", ")}.</Row>
+                  <Row>Popularity: {movieDetailsData.popularity}</Row>
+                  <Row>Productor companies: {productors.join(", ")}.</Row>
+                  <Row>Countries filmed in: {countries.join(", ")}.</Row>
+                </Row>
+                {movieDetailsData.homepage && (
+                  <Container>
+                    <br />
+                    <Row>
+                      <a href={movieDetailsData.homepage}>
+                        <Button variant="primary">Know more details</Button>
+                      </a>
+                    </Row>{" "}
+                  </Container>
+                )}
               </Col>
             </Row>
           </Container>
