@@ -1,3 +1,17 @@
-const PageNotFound = () => <h1>Error 404: Page not found</h1>;
+import Alert from "react-bootstrap/Alert";
+const PageNotFound = () => {
+  return (
+    <Alert variant="danger">
+      <Alert.Heading>Error 404</Alert.Heading>
+      <p>
+       Page not found
+      </p>
+      <hr />
+      <p className="mb-0">
+        Please try again later
+      </p>
+    </Alert>
+  );
+};
 
 export default PageNotFound;
