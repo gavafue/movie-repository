@@ -34,8 +34,8 @@ const Routes = () => {
     <Row>
       {movieList.map((oneMovie, index) => {
         return (
-          <Col xs={6} md={4} lg={3}>
-            <Card key={index} id={index}>
+          <Col xs={6} md={4} lg={3} key={index}>
+            <Card id={index} key={index}>
               <Card.Img
                 variant="top"
                 src={`https://image.tmdb.org/t/p/w500${oneMovie.poster_path}`}

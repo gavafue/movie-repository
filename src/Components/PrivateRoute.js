@@ -1,12 +1,17 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
-const PrivateRoute = ({children}) => {
-  let token = sessionStorage.getItem("token");
+import Layout from "./Layout";
+import { useAuthStatus } from "../Hooks/useAuthStatus";
 
-  if (!token) {
-    return <Navigate replace to="/"></Navigate>;
+const PrivateRoute = ({ children }) => {
+  const { loggedIn, user } = useAuthStatus();
+
+  if (loggedIn === undefined) {
+    return <p>Loading ...</p>;
+  } else if (loggedIn === true) {
+    return <Layout user={user}>{children}</Layout>;
   } else {
-    return children;
+    return <Navigate replace to="/"></Navigate>;
   }
 };
 export default PrivateRoute;
