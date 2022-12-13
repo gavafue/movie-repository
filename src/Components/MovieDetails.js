@@ -42,7 +42,7 @@ const MovieDetails = () => {
   }, []);
 
   return (
-    <Container>
+    <Container className="w-100">
       <Card border="secondary">
         <Card.Header>
           <Card.Title>
@@ -55,7 +55,7 @@ const MovieDetails = () => {
               <Col xs={12} sm={4}>
                 <Card className="bg-dark text-white">
                   <Card.Img
-                    src={`https://image.tmdb.org/t/p/w500${movieDetailsData.poster_path}`}
+                    src={`https://image.tmdb.org/t/p/original${movieDetailsData.poster_path}`}
                     alt={`Poster image from ${movieDetailsData.original_title}`}
                   />
                 </Card>

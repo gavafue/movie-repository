@@ -95,28 +95,28 @@ const Navbar = ({ user }) => {
                 sx={{ textDecoration: "none" }}
                 onClick={() => navigate("/home")}
               >
-                <Typography textAlign="center">HOME</Typography>
+                <Typography textAlign="center">Home</Typography>
               </MenuItem>
 
               <MenuItem
                 sx={{ textDecoration: "none" }}
                 onClick={() => navigate("/movies")}
               >
-                <Typography textAlign="center">MOVIES</Typography>
+                <Typography textAlign="center">Movies</Typography>
               </MenuItem>
 
               <MenuItem
                 sx={{ textDecoration: "none" }}
                 onClick={() => navigate("/series")}
               >
-                <Typography textAlign="center">SERIES</Typography>
+                <Typography textAlign="center">Series</Typography>
               </MenuItem>
 
               <MenuItem
                 sx={{ textDecoration: "none" }}
                 onClick={() => navigate("/contact")}
               >
-                <Typography textAlign="center">CONTACT</Typography>
+                <Typography textAlign="center">Contact</Typography>
               </MenuItem>
             </Menu>
           </Box>

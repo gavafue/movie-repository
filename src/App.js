@@ -9,13 +9,21 @@ import RoutesList from "./Components/MoviesList";
 import PageNotFound from "./Components/PageNotFound";
 import MovieDetails from "./Components/MovieDetails";
 import PrivateRoute from "./Components/PrivateRoute";
+import Landing from "./Components/Landing";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" exact element={<Login />} />
-        <Route path="/home" element={<PrivateRoute>Probando</PrivateRoute>} />
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Landing />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/movies"
           exact

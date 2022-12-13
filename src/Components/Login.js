@@ -16,6 +16,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useAuthStatus } from "../Hooks/useAuthStatus";
+import HashLoader from "react-spinners/HashLoader";
 const MySwal = withReactContent(swAlert);
 
 const Login = () => {
@@ -60,7 +61,7 @@ const Login = () => {
     loginWithCredentials(email, password);
   };
   if (loggedIn === undefined) {
-    return <p>Loading</p>;
+    return <HashLoader color="#212529" size={150} />;
   } else if (loggedIn === true) {
     return <Navigate to="/home"></Navigate>;
   } else {
