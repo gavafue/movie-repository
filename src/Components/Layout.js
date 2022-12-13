@@ -1,12 +1,12 @@
-import Header from "./Header";
+import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Container } from "react-bootstrap";
 
 const Layout = ({ children, user }) => {
   return (
     <>
-      <Header user={user} />
-      <Container>{children}</Container>
+      <Navbar user={user} />
+      <Container style={{ overflow: "auto" }}>{children}</Container>
       <Footer />
     </>
   );

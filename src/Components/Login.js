@@ -39,7 +39,7 @@ const Login = () => {
         password
       );
       localStorage.setItem("userLogged", JSON.stringify(userLogged.user));
-      navigate("/list");
+      navigate("/home");
       MySwal.fire({
         icon: "success",
         title: "Done!",

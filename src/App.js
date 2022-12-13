@@ -17,7 +17,8 @@ function App() {
         <Route path="/" exact element={<Login />} />
         <Route path="/home" element={<PrivateRoute>Probando</PrivateRoute>} />
         <Route
-          path="/list"
+          path="/movies"
+          exact
           element={
             <PrivateRoute>
               <RoutesList />
@@ -25,7 +26,7 @@ function App() {
           }
         />
         <Route
-          path="/details"
+          path="movies/details"
           element={
             <PrivateRoute>
               <MovieDetails />

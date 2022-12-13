@@ -1,7 +1,6 @@
 import React from "react";
 import { MDBFooter, MDBContainer, MDBIcon, MDBBtn } from "mdb-react-ui-kit";
 
-
 const Footer = () => {
   return (
     <MDBFooter className="bg-dark text-center text-white">
@@ -14,38 +13,9 @@ const Footer = () => {
             className="m-1"
             href="#!"
             role="button"
-          >
-            <MDBIcon fab icon="facebook-f" />
-          </MDBBtn>
-
-          <MDBBtn
-            outline
-            color="light"
-            floating
-            className="m-1"
-            href="#!"
-            role="button"
-          >
-            <MDBIcon fab icon="twitter" />
-          </MDBBtn>
-
-          <MDBBtn
-            outline
-            color="light"
-            floating
-            className="m-1"
-            href="#!"
-            role="button"
-          >
-            <MDBIcon fab icon="google" />
-          </MDBBtn>
-          <MDBBtn
-            outline
-            color="light"
-            floating
-            className="m-1"
-            href="#!"
-            role="button"
+            onClick={() =>
+              (window.location.href = "https://www.instagram.com/gavafue/")
+            }
           >
             <MDBIcon fab icon="instagram" />
           </MDBBtn>
@@ -57,6 +27,9 @@ const Footer = () => {
             className="m-1"
             href="#!"
             role="button"
+            onClick={() =>
+              (window.location.href = "https://www.linkedin.com/in/gavafue/")
+            }
           >
             <MDBIcon fab icon="linkedin-in" />
           </MDBBtn>
@@ -68,6 +41,7 @@ const Footer = () => {
             className="m-1"
             href="#!"
             role="button"
+            onClick={() => (window.location = "https://github.com/gavafue")}
           >
             <MDBIcon fab icon="github" />
           </MDBBtn>

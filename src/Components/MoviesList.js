@@ -45,7 +45,7 @@ const Routes = () => {
                 <Card.Text>{oneMovie.overview.substring(0, 110)}...</Card.Text>
                 <Link
                   className="text-center"
-                  to={`/details?movieID=${oneMovie.id}`}
+                  to={`/movies/details?movieID=${oneMovie.id}`}
                 >
                   <Button className="text-center" variant="secondary">
                     View details
