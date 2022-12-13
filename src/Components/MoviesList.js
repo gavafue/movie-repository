@@ -1,14 +1,18 @@
 import Row from "react-bootstrap/Row";
 import React from "react";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import swAlert from "sweetalert2";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { Button, CardActionArea, CardActions } from "@mui/material";
 
 const Routes = () => {
+  const navigate = useNavigate();
   const [movieList, setMovieList] = useState([]);
   useEffect(() => {
     const endpoint =
@@ -34,24 +38,34 @@ const Routes = () => {
     <Row>
       {movieList.map((oneMovie, index) => {
         return (
-          <Col xs={6} md={4} lg={3} key={index}>
-            <Card id={index} key={index}>
-              <Card.Img
-                variant="top"
-                src={`https://image.tmdb.org/t/p/w500${oneMovie.poster_path}`}
-              />
-              <Card.Body>
-                <Card.Title>{oneMovie.title}</Card.Title>
-                <Card.Text>{oneMovie.overview.substring(0, 110)}...</Card.Text>
-                <Link
-                  className="text-center"
-                  to={`/movies/details?movieID=${oneMovie.id}`}
+          <Col xs={6} md={4} lg={3} key={index} style={{ marginTop: "10px" }}>
+            <Card style={{ maxWidth: 345 }}>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  image={`https://image.tmdb.org/t/p/original${oneMovie.poster_path}`}
+                  alt={oneMovie.title}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h6" component="div">
+                    {oneMovie.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {oneMovie.overview.substring(0, 80)}...
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+              <CardActions className="justify-content-center">
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={() =>
+                    navigate(`/movies/details?movieID=${oneMovie.id}`)
+                  }
                 >
-                  <Button className="text-center" variant="secondary">
-                    View details
-                  </Button>
-                </Link>
-              </Card.Body>
+                  View details
+                </Button>
+              </CardActions>
             </Card>
           </Col>
         );

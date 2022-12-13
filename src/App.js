@@ -10,12 +10,18 @@ import PageNotFound from "./Components/PageNotFound";
 import MovieDetails from "./Components/MovieDetails";
 import PrivateRoute from "./Components/PrivateRoute";
 import Landing from "./Components/Landing";
-
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import "./css/font.css";
+import Loader from "./Components/Loader";
 function App() {
   return (
-    <>
+    <div style={{ fontFamily: "Roboto" }}>
       <Routes>
         <Route path="/" exact element={<Login />} />
+        <Route path="/loader" exact element={<Loader />} />
         <Route
           path="/home"
           element={
@@ -50,7 +56,7 @@ function App() {
           }
         />
       </Routes>
-    </>
+    </div>
   );
 }
 
