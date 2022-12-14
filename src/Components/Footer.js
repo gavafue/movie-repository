@@ -14,20 +14,6 @@ const Footer = () => {
             href="#!"
             role="button"
             onClick={() =>
-              (window.location.href = "https://www.instagram.com/gavafue/")
-            }
-          >
-            <MDBIcon fab icon="instagram" />
-          </MDBBtn>
-
-          <MDBBtn
-            outline
-            color="light"
-            floating
-            className="m-1"
-            href="#!"
-            role="button"
-            onClick={() =>
               (window.location.href = "https://www.linkedin.com/in/gavafue/")
             }
           >
