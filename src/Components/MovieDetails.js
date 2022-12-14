@@ -159,7 +159,7 @@ const MovieDetails = () => {
                     return (
                       <Col
                         key={index}
-                        sm={6}
+                        xs={6}
                         md={4}
                         lg={2}
                         style={{ marginBottom: "15px" }}
