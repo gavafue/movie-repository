@@ -38,7 +38,13 @@ const Routes = () => {
     <Row>
       {movieList.map((oneMovie, index) => {
         return (
-          <Col xs={6} md={4} lg={3} key={index} style={{ marginTop: "10px" }}>
+          <Col
+            xs={6}
+            md={4}
+            lg={3}
+            key={index}
+            style={{ marginTop: "10px", marginBottom: "10px" }}
+          >
             <Card style={{ maxWidth: 345 }}>
               <CardActionArea>
                 <CardMedia
@@ -55,7 +61,7 @@ const Routes = () => {
                   </Typography>
                 </CardContent>
               </CardActionArea>
-              <CardActions className="justify-content-center">
+              <CardActions>
                 <Button
                   size="small"
                   color="primary"

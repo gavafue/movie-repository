@@ -18,7 +18,7 @@ import "./css/font.css";
 import Loader from "./Components/Loader";
 function App() {
   return (
-    <div style={{ fontFamily: "Roboto" }}>
+    <div style={{ backgroundColor: "#00000010" }}>
       <Routes>
         <Route path="/" exact element={<Login />} />
         <Route path="/loader" exact element={<Loader />} />

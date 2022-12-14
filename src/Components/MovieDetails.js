@@ -7,9 +7,12 @@ import { Button, Paper, Typography } from "@mui/material";
 import Card2 from "@mui/joy/Card";
 import CardCover2 from "@mui/joy/CardCover";
 import CardContent2 from "@mui/joy/CardContent";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const MovieDetails = () => {
+  const navigate = useNavigate();
+  let query = new URLSearchParams(window.location.search);
+  const [movieID, setMovieID] = useState("");
   const [movieDetailsData, setMovieDetailsData] = useState([]);
   const [genres, setGenres] = useState([]);
   const [productors, setProductors] = useState([]);
@@ -17,8 +20,7 @@ const MovieDetails = () => {
   const [spokenLanguages, setSpokenLanguages] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([]);
   useEffect(() => {
-    let query = new URLSearchParams(window.location.search);
-    let movieID = query.get("movieID");
+    setMovieID(query.get("movieID"));
     const extendedInfo = `https://api.themoviedb.org/3/movie/${movieID}?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US
     `;
     const similarMovies = `https://api.themoviedb.org/3/movie/${movieID}/similar?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1`;
@@ -59,19 +61,22 @@ const MovieDetails = () => {
         const dataSimilarMovies = response.data.results;
         setSimilarMovies(dataSimilarMovies.slice(0, 6));
       })
-      .catch(
-        (error) => console.log(error.message)
-        //   swAlert({
-        //     title: "Oops!",
-        //     text: `There was an error, please
-        //  try again in a few moments. Error message:${error}`,
-        //     icon: "error",
-        //   })
+      .catch((error) =>
+        swAlert({
+          title: "Oops!",
+          text: `There was an error, please
+         try again in a few moments. Error message:${error}`,
+          icon: "error",
+        })
       );
-  }, [setMovieDetailsData]);
+    // eslint-disable-next-line
+  }, [query]);
 
   return (
-    <Container className="w-100">
+    <Container
+      className="w-100"
+      style={{ marginTop: "15px", marginBottom: "15px" }}
+    >
       <Card border="secondary">
         <Card.Header>
           <Card.Title>
@@ -144,45 +149,54 @@ const MovieDetails = () => {
               </Col>
             </Row>
             <Row>
-              <Paper>
-                <h5>Similar movies</h5>
+              <Paper
+                elevation={3}
+                style={{ marginTop: "15px", padding: "10px" }}
+              >
+                <h5>Suggestions</h5>
                 <Row>
                   {similarMovies?.map((movie, index) => {
                     return (
-                      <Col key={index}>
-                        <Link to={`/movies/details?movieID=${movie.id}`}>
-                          <Card2 sx={{ minHeight: "260px" }}>
-                            <CardCover2>
-                              <img
-                                src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                                srcSet={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                                loading="lazy"
-                                alt={movie.title}
-                              />
-                            </CardCover2>
-                            <CardCover2
-                              sx={{
-                                background:
-                                  "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
-                              }}
+                      <Col
+                        key={index}
+                        sm={6}
+                        md={4}
+                        lg={2}
+                        style={{ marginBottom: "15px" }}
+                      >
+                        <Card2
+                          sx={{ minHeight: "240px", cursor: "pointer" }}
+                          onClick={() =>
+                            navigate(`/movies/details?movieID=${movie.id}`)
+                          }
+                        >
+                          <CardCover2>
+                            <img
+                              src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                              srcSet={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                              loading="lazy"
+                              alt={movie.title}
                             />
-                            <CardContent2
-                              sx={{
-                                justifyContent: "flex-end",
-                                textAlign: "center",
-                              }}
+                          </CardCover2>
+                          <CardCover2
+                            sx={{
+                              background:
+                                "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
+                            }}
+                          />
+                          <CardContent2
+                            sx={{
+                              justifyContent: "flex-end",
+                              textAlign: "center",
+                            }}
+                          >
+                            <Typography
+                              sx={{ color: "white", fontSize: "14px" }}
                             >
-                              <Typography
-                                level="h2"
-                                fontSize="lg"
-                                mb={1}
-                                sx={{ color: "white" }}
-                              >
-                                {movie.title}
-                              </Typography>
-                            </CardContent2>
-                          </Card2>
-                        </Link>
+                              {movie.title}
+                            </Typography>
+                          </CardContent2>
+                        </Card2>
                       </Col>
                     );
                   })}
