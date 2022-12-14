@@ -53,7 +53,7 @@ const Landing = () => {
         setTrending(apiData);
       })
       .catch((error) => console.log(error));
-  }, [setPopularFilms, setTrending]);
+  }, []);
 
   return (
     <Container>
