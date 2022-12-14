@@ -41,7 +41,9 @@ const Landing = () => {
     axios
       .get(popularFilmsURL)
       .then((response) => {
-        const apiData = response.data.results;
+        const apiData = response.data.results
+          .sort((x, y) => (x.popularity = y.popularity))
+          .slice(0, 6);
         setPopularFilms(apiData);
       })
       .catch((error) => console.log(error));
@@ -125,61 +127,65 @@ const Landing = () => {
               overflow: "auto",
             }}
           >
-            {trending.map((multimedia) => {
+            {trending.map((multimedia, index) => {
               return (
-                <>
-                  <ListItem
-                    alignItems="flex-start"
-                    onClick={() => {
-                      if (multimedia.media_type === "movie") {
-                        navigate(`/movies/details?movieID=${multimedia.id}`);
-                      }
-                    }}
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        variant="square"
-                        alt={
-                          multimedia.title ? multimedia.title : multimedia.name
-                        }
-                        src={`https://image.tmdb.org/t/p/original${multimedia.poster_path}`}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        multimedia.title ? multimedia.title : multimedia.name
-                      }
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            sx={{ display: "inline" }}
-                            component="span"
-                            variant="body2"
-                            color="text.primary"
-                          >
-                            {multimedia.media_type.toUpperCase()}
-                          </Typography>
-                          <Row style={{ alignItems: "center" }}>
-                            <Col xs={9}>
-                              <Rating
-                                name="Rating"
-                                size="small"
-                                value={multimedia.vote_average}
-                                precision={0.001}
-                                max={10}
-                                readOnly
-                              />
-                            </Col>
-                            <Col>{`${JSON.stringify(
-                              multimedia.vote_average
-                            ).slice(0, 3)}/10`}</Col>
-                          </Row>
-                        </React.Fragment>
-                      }
-                    />
-                  </ListItem>
+                <div
+                  key={index}
+                  style={{ alignItems: "flex-start" }}
+                  onClick={() => {
+                    if (multimedia.media_type === "movie") {
+                      navigate(`/movies/details?movieID=${multimedia.id}`);
+                    }
+                  }}
+                >
+                  <Row>
+                    <Col>
+                      <ListItemAvatar>
+                        <Avatar
+                          variant="square"
+                          alt={
+                            multimedia.title
+                              ? multimedia.title
+                              : multimedia.name
+                          }
+                          src={`https://image.tmdb.org/t/p/original${multimedia.poster_path}`}
+                        />
+                      </ListItemAvatar>
+                    </Col>
+                    <Col>
+                      {multimedia.title ? multimedia.title : multimedia.name}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <>
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
+                        {multimedia.media_type.toUpperCase()}
+                      </Typography>
+                      <Row style={{ alignItems: "center" }}>
+                        <Col xs={9}>
+                          <Rating
+                            name="Rating"
+                            size="small"
+                            value={multimedia.vote_average}
+                            precision={0.5}
+                            max={10}
+                            readOnly
+                          />
+                        </Col>
+                        <Col>{`${JSON.stringify(multimedia.vote_average).slice(
+                          0,
+                          3
+                        )}/10`}</Col>
+                      </Row>
+                    </>
+                  </Row>
                   <Divider variant="inset" component="li" />
-                </>
+                </div>
               );
             })}
           </List>
