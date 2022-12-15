@@ -64,7 +64,7 @@ const MoviesList = () => {
 
   return (
     <Row>
-      <Col xs={1} lg={2}>
+      <Col xs={4} md={3} lg={2}>
         <Divider style={{ marginTop: "10px" }} />
         <List>
           {genresList?.map((genre) => (
@@ -81,7 +81,7 @@ const MoviesList = () => {
         </List>
         <Divider />
       </Col>
-      <Col>
+      <Col xs={8} md={9} lg={10}>
         <Row>
           {moviesList?.map((oneMovie, index) => {
             return (

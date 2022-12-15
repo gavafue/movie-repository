@@ -106,7 +106,7 @@ const Landing = () => {
           </Carousel>
         </Col>
         <Col xs={12} md={4}>
-          <h5 className="text-center">Top 6 movies</h5>
+          <h5 className="text-center">Trenging list</h5>
           <Container style={{ height: "80vh", overflow: "auto" }}>
             <List
               sx={{
