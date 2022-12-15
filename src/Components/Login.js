@@ -160,7 +160,8 @@ const Login = () => {
                         </div>
                         <Alert variant="secondary" className="d-block">
                           If you want to try the aplication, use the following
-                          credentials: Email: email: try@gabiflix.org ||
+                          credentials: <br />
+                          Email: try@gabiflix.org <br />
                           Password: gabiflix
                         </Alert>
                       </div>
