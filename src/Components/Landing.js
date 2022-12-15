@@ -19,6 +19,7 @@ import CardJoy from "@mui/joy/Card";
 import CardCoverJoy from "@mui/joy/CardCover";
 import CardContentJoy from "@mui/joy/CardContent";
 import { useNavigate } from "react-router-dom";
+import VerticalMarquee from "./VerticalMarquee/VerticalMarquee";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -106,14 +107,10 @@ const Landing = () => {
           </Carousel>
         </Col>
         <Col xs={12} md={4}>
-          <h5 className="text-center">Trenging list</h5>
-          <Container style={{ height: "80vh", overflow: "auto" }}>
-            <List
-              sx={{
-                width: "100%",
-                bgcolor: "background.paper",
-              }}
-            >
+          <h5 className="text-center">Trending list</h5>
+          <Container style={{ height: "80vh" }}>
+            <VerticalMarquee>
+              {" "}
               {trending.map((multimedia, index) => {
                 return (
                   <div
@@ -180,7 +177,7 @@ const Landing = () => {
                   </div>
                 );
               })}
-            </List>
+            </VerticalMarquee>
           </Container>
         </Col>
       </Row>
