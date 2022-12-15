@@ -7,12 +7,11 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-
+import { Avatar } from "@mui/material";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import LocalMoviesIcon from "@mui/icons-material/LocalMovies";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
@@ -178,10 +177,9 @@ const Navbar = ({ user }) => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title={`Open settings for ${user.email}`}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <AccountCircleRoundedIcon
-                  fontSize="large"
-                  sx={{ color: "white" }}
-                />
+                <Avatar sx={{ bgcolor: "rgb(103, 58, 183)" }}>
+                  {user.email.slice(0, 1)}
+                </Avatar>
               </IconButton>
             </Tooltip>
             <Menu

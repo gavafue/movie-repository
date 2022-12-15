@@ -5,7 +5,7 @@ import "./css/bootstrap.min.css";
 import React from "react";
 import Login from "./Components/Login";
 import { Routes, Route } from "react-router-dom";
-import RoutesList from "./Components/MoviesList";
+import MoviesList from "./Components/MoviesList";
 import PageNotFound from "./Components/PageNotFound";
 import MovieDetails from "./Components/MovieDetails";
 import PrivateRoute from "./Components/PrivateRoute";
@@ -15,13 +15,13 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./css/font.css";
-import Loader from "./Components/Loader";
+
 function App() {
   return (
     <div style={{ backgroundColor: "#00000010" }}>
       <Routes>
         <Route path="/" exact element={<Login />} />
-        <Route path="/loader" exact element={<Loader />} />
+        <Route path="/loader" exact element={"hola"} />
         <Route
           path="/home"
           element={
@@ -35,7 +35,7 @@ function App() {
           exact
           element={
             <PrivateRoute>
-              <RoutesList />
+              <MoviesList />
             </PrivateRoute>
           }
         />
