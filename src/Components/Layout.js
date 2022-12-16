@@ -10,7 +10,7 @@ const Layout = ({ children, user }) => {
       }}
     >
       <Navbar user={user} />
-      <Container style={{ overflow: "auto" }}>{children}</Container>
+      <Container>{children}</Container>
       <Footer />
     </div>
   );

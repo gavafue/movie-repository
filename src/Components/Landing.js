@@ -14,6 +14,7 @@ import {
   CardContent,
   CardActions,
   Button,
+  Chip,
 } from "@mui/material";
 import CardJoy from "@mui/joy/Card";
 import CardCoverJoy from "@mui/joy/CardCover";
@@ -30,6 +31,20 @@ const Landing = () => {
 
   const [popularFilms, setPopularFilms] = useState([]);
   const [trending, setTrending] = useState([]);
+  const [genres, setGenresList] = useState([]);
+  useEffect(() => {
+    const genresAPI =
+      "https://api.themoviedb.org/3/genre/movie/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
+    axios
+      // eslint-disable-next-line
+      .get(genresAPI)
+      .then((response) => {
+        const apiData = response.data.genres;
+        setGenresList(apiData);
+        console.log(apiData);
+      })
+      .catch((error) => console.log(error.message));
+  }, []);
   const popularFilmsURL =
     "https://api.themoviedb.org/3/movie/popular?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1";
   const trendingURL =
@@ -67,6 +82,7 @@ const Landing = () => {
             interval={2000}
           >
             {popularFilms?.map((film, index) => {
+              console.log(film);
               return (
                 <Carousel.Item key={index}>
                   <CardJoy
@@ -98,6 +114,29 @@ const Landing = () => {
                       >
                         {film.title}
                       </Typography>
+                      <Row>
+                        <Col className="mx-auto">
+                          <Row
+                            className="d-flex justify-content-center align-items-center"
+                            style={{ marginBottom: "15px" }}
+                          >
+                            {film.genre_ids.map((eachGenreId, idx) => {
+                              const thisGenre = genres.find(
+                                (genre) => genre.id === eachGenreId
+                              );
+                              return (
+                                <Chip
+                                  color="secondary"
+                                  size="small"
+                                  style={{ width: `80px`, margin: "2px" }}
+                                  key={idx}
+                                  label={thisGenre.name}
+                                />
+                              );
+                            })}
+                          </Row>
+                        </Col>
+                      </Row>
                     </CardContentJoy>
                   </CardJoy>
                 </Carousel.Item>

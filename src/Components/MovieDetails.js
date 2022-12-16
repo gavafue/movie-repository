@@ -28,7 +28,6 @@ const MovieDetails = () => {
   const similarMoviesAPI = `https://api.themoviedb.org/3/movie/${movieID}/similar?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1`;
 
   useEffect(() => {
-
     const query = new URLSearchParams(location.search);
     const queryParamMovieID = query.get("movieID");
     setMovieID(queryParamMovieID);
@@ -185,6 +184,10 @@ const MovieDetails = () => {
                           onClick={() => {
                             setMovieID(movie.id);
                             navigate(`/movies/details?movieID=${movie.id}`);
+                            window.scrollTo({
+                              top: 0,
+                              behavior: "smooth",
+                            });
                           }}
                         >
                           <CardCover2>

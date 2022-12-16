@@ -19,12 +19,12 @@ import ListItemText from "@mui/material/ListItemText";
 import { Pagination } from "@mui/material";
 const MySwal = withReactContent(swAlert);
 
-const MoviesList = () => {
+const SeriesList = () => {
   const navigate = useNavigate();
   const [genresList, setGenresList] = useState([]);
-  const [moviesList, setMoviesList] = useState([]);
-  const [genreID, setGenreID] = useState(28);
-  const [selectedGenre, setSelectedGenre] = useState("Action");
+  const [seriesList, setSeriesList] = useState([]);
+  const [genreID, setGenreID] = useState(10759);
+  const [selectedGenre, setSelectedGenre] = useState("Action & Adventure");
   const [page, setPage] = useState(1);
   const fecha = new Date();
   const dia = fecha.getDate();
@@ -40,10 +40,8 @@ const MoviesList = () => {
   };
   useEffect(() => {
     const genresAPI =
-      "https://api.themoviedb.org/3/genre/movie/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
-    const discoverApi = `
-    https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=release_date.desc&include_adult=false&page=${page}&release_date.lte=${año}-${mesActual}-${dia}&with_genres=${genreID}`;
-
+      "https://api.themoviedb.org/3/genre/tv/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
+    const discoverTVProgramsAPI = `https://api.themoviedb.org/3/discover/tv?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=first_air_date.desc&first_air_date.lte=${año}-${mesActual}-${dia}&page=${page}&with_genres=${genreID}&include_null_first_air_dates=false`;
     axios
       // eslint-disable-next-line
       .get(genresAPI)
@@ -55,10 +53,10 @@ const MoviesList = () => {
 
     axios
       // eslint-disable-next-line
-      .get(discoverApi)
+      .get(discoverTVProgramsAPI)
       .then((response) => {
         const apiData = response.data;
-        setMoviesList(apiData);
+        setSeriesList(apiData);
       })
       .catch((error) =>
         MySwal.fire({
@@ -104,7 +102,7 @@ const MoviesList = () => {
           </h5>
         </Row>
         <Row>
-          {moviesList.results?.map((oneMovie, index) => {
+          {seriesList.results?.map((oneMovie, index) => {
             console.log(
               `https://image.tmdb.org/t/p/original${oneMovie.poster_path}`
             );
@@ -156,7 +154,7 @@ const MoviesList = () => {
           <Pagination
             style={{ padding: "15px" }}
             variant="outlined"
-            count={moviesList.total_pages < 500 ? moviesList.total_pages : 500}
+            count={seriesList.total_pages < 500 ? seriesList.total_pages : 500}
             page={page}
             onChange={handleChange}
           />
@@ -166,4 +164,4 @@ const MoviesList = () => {
   );
 };
 
-export default MoviesList;
+export default SeriesList;

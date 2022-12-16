@@ -10,6 +10,7 @@ import PageNotFound from "./Components/PageNotFound";
 import MovieDetails from "./Components/MovieDetails";
 import PrivateRoute from "./Components/PrivateRoute";
 import Landing from "./Components/Landing";
+import SeriesList from "./Components/SeriesList";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -21,7 +22,7 @@ function App() {
     <div style={{ backgroundColor: "#00000010" }}>
       <Routes>
         <Route path="/" exact element={<Login />} />
-        <Route path="/loader" exact element={"Hola"} />
+
         <Route
           path="/home"
           element={
@@ -44,6 +45,15 @@ function App() {
           element={
             <PrivateRoute>
               <MovieDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/series"
+          exact
+          element={
+            <PrivateRoute>
+              <SeriesList />
             </PrivateRoute>
           }
         />
