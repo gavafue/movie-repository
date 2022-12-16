@@ -2,16 +2,19 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import swAlert from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { Button, Paper, Typography } from "@mui/material";
 import Card2 from "@mui/joy/Card";
 import CardCover2 from "@mui/joy/CardCover";
 import CardContent2 from "@mui/joy/CardContent";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Rating } from "@mui/material";
 
 const MovieDetails = () => {
+  const MySwal = withReactContent(swAlert);
   const navigate = useNavigate();
-  let query = new URLSearchParams(window.location.search);
+  const location = useLocation();
   const [movieID, setMovieID] = useState("");
   const [movieDetailsData, setMovieDetailsData] = useState([]);
   const [genres, setGenres] = useState([]);
@@ -19,58 +22,65 @@ const MovieDetails = () => {
   const [countries, setCountries] = useState([]);
   const [spokenLanguages, setSpokenLanguages] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([]);
-  useEffect(() => {
-    setMovieID(query.get("movieID"));
-    const extendedInfo = `https://api.themoviedb.org/3/movie/${movieID}?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US
-    `;
-    const similarMovies = `https://api.themoviedb.org/3/movie/${movieID}/similar?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1`;
-    // Function to get info of the movie selected
-    axios
-      .get(extendedInfo)
-      .then((response) => {
-        const data = response.data;
-        setMovieDetailsData(data);
-        const genresList = data.genres.map((genre) => genre.name);
-        setGenres(genresList);
-        const producersList = data.production_companies.map(
-          (productor) => productor.name
-        );
-        setProductors(producersList);
-        const filmedCountriesList = data.production_countries.map(
-          (country) => country.name
-        );
-        setCountries(filmedCountriesList);
-        const spokenLanguagesList = data.spoken_languages.map(
-          (language) => language.english_name
-        );
-        setSpokenLanguages(spokenLanguagesList);
-      })
-      .catch((error) =>
-        swAlert({
-          title: "Oops!",
-          text: `There was an error, please
-       try again in a few moments. Error message:${error}`,
-          icon: "error",
-        })
-      );
 
-    //Function to get info about similar movies
-    axios
-      .get(similarMovies)
-      .then((response) => {
-        const dataSimilarMovies = response.data.results;
-        setSimilarMovies(dataSimilarMovies.slice(0, 6));
-      })
-      .catch((error) =>
-        swAlert({
-          title: "Oops!",
-          text: `There was an error, please
-         try again in a few moments. Error message:${error}`,
-          icon: "error",
+  const extendedInfoAPI = `https://api.themoviedb.org/3/movie/${movieID}?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US
+    `;
+  const similarMoviesAPI = `https://api.themoviedb.org/3/movie/${movieID}/similar?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1`;
+
+  useEffect(() => {
+
+    const query = new URLSearchParams(location.search);
+    const queryParamMovieID = query.get("movieID");
+    setMovieID(queryParamMovieID);
+    if (movieID !== "" && movieID !== undefined) {
+      // Function to get info of the movie selected
+      axios
+        .get(extendedInfoAPI)
+        .then((response) => {
+          const data = response.data;
+          setMovieDetailsData(data);
+          const genresList = data.genres.map((genre) => genre.name);
+          setGenres(genresList);
+          const producersList = data.production_companies.map(
+            (productor) => productor.name
+          );
+          setProductors(producersList);
+          const filmedCountriesList = data.production_countries.map(
+            (country) => country.name
+          );
+          setCountries(filmedCountriesList);
+          const spokenLanguagesList = data.spoken_languages.map(
+            (language) => language.english_name
+          );
+          setSpokenLanguages(spokenLanguagesList);
         })
-      );
+        .catch((error) =>
+          MySwal.fire({
+            title: "Oops!",
+            text: `There was an error, please
+       try again in a few moments. Error message:${error}`,
+            icon: "error",
+          })
+        );
+
+      //Function to get info about similar movies
+      axios
+        .get(similarMoviesAPI)
+        .then((response) => {
+          const dataSimilarMovies = response.data.results;
+          setSimilarMovies(dataSimilarMovies.slice(0, 6));
+        })
+        .catch((error) =>
+          MySwal.fire({
+            title: "Oops!",
+            text: `There was an error, please
+   try again in a few moments. Error message:${error}`,
+            icon: "error",
+          })
+        );
+    }
     // eslint-disable-next-line
-  }, [query]);
+  }, [movieID]);
 
   return (
     <Container
@@ -113,8 +123,14 @@ const MovieDetails = () => {
                   <Row>
                     <Col>
                       <h6>Popularity:</h6>
-                      <p>{movieDetailsData.popularity}</p>
-                      <p></p>
+                      <Rating
+                        name="detailsRating"
+                        size="small"
+                        value={movieDetailsData?.vote_average || 0}
+                        precision={0.5}
+                        max={10}
+                        readOnly
+                      />
                     </Col>
                     <Col>
                       <h6>Productor companies:</h6>
@@ -166,9 +182,10 @@ const MovieDetails = () => {
                       >
                         <Card2
                           sx={{ minHeight: "240px", cursor: "pointer" }}
-                          onClick={() =>
-                            navigate(`/movies/details?movieID=${movie.id}`)
-                          }
+                          onClick={() => {
+                            setMovieID(movie.id);
+                            navigate(`/movies/details?movieID=${movie.id}`);
+                          }}
                         >
                           <CardCover2>
                             <img

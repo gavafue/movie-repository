@@ -16,24 +16,33 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-
+import { Pagination } from "@mui/material";
 const MySwal = withReactContent(swAlert);
 
 const MoviesList = () => {
   const navigate = useNavigate();
-  const [genresList, setGenresList] = useState();
-  const [moviesList, setMoviesList] = useState();
+  const [genresList, setGenresList] = useState([]);
+  const [moviesList, setMoviesList] = useState([]);
   const [genreID, setGenreID] = useState(28);
+  const [page, setPage] = useState(1);
   const fecha = new Date();
   const dia = fecha.getDate();
   const mesActual = fecha.getMonth() + 1;
   const año = fecha.getFullYear();
 
-  const genresAPI =
-    "https://api.themoviedb.org/3/genre/movie/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
-  const discoverApi = `https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=release_date.desc&page=1&release_date.lte=${año}-${mesActual}-${dia}&with_genres=${genreID}`;
-
+  const handleChange = (event, value) => {
+    setPage(value);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
   useEffect(() => {
+    const genresAPI =
+      "https://api.themoviedb.org/3/genre/movie/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
+    const discoverApi = `
+    https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=release_date.desc&include_adult=false&page=${page}&release_date.lte=${año}-${mesActual}-${dia}&with_genres=${genreID}`;
+
     axios
       // eslint-disable-next-line
       .get(genresAPI)
@@ -41,26 +50,24 @@ const MoviesList = () => {
         const apiData = response.data.genres;
         setGenresList(apiData);
       })
-      .catch((error) => console.log(error));
-  }, []);
+      .catch((error) => console.log(error.message));
 
-  useEffect(() => {
     axios
       // eslint-disable-next-line
       .get(discoverApi)
       .then((response) => {
-        const apiData = response.data.results;
+        const apiData = response.data;
         setMoviesList(apiData);
       })
       .catch((error) =>
         MySwal.fire({
           icon: "error",
           title: "Ooops!...",
-          text: `There were an error: ${error.message}`,
+          text: `There were an error: ${error}`,
         })
       );
     // eslint-disable-next-line
-  }, [genreID]);
+  }, [genreID, page]);
 
   return (
     <Row>
@@ -70,7 +77,14 @@ const MoviesList = () => {
           {genresList?.map((genre) => (
             <ListItem
               key={genre.id}
-              onClick={() => setGenreID(genre.id)}
+              onClick={() => {
+                setGenreID(genre.id);
+                setPage(1);
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
+              }}
               disablePadding
             >
               <ListItemButton>
@@ -83,7 +97,10 @@ const MoviesList = () => {
       </Col>
       <Col xs={8} md={9} lg={10}>
         <Row>
-          {moviesList?.map((oneMovie, index) => {
+          {moviesList.results?.map((oneMovie, index) => {
+            console.log(
+              `https://image.tmdb.org/t/p/original${oneMovie.poster_path}`
+            );
             return (
               <Col
                 xs={6}
@@ -96,7 +113,11 @@ const MoviesList = () => {
                   <CardActionArea>
                     <CardMedia
                       component="img"
-                      image={`https://image.tmdb.org/t/p/original${oneMovie.poster_path}`}
+                      image={
+                        oneMovie.poster_path
+                          ? `https://image.tmdb.org/t/p/original${oneMovie.poster_path}`
+                          : `http://via.placeholder.com/700x1000.png`
+                      }
                       alt={oneMovie.title}
                     />
                     <CardContent>
@@ -124,6 +145,15 @@ const MoviesList = () => {
             );
           })}
         </Row>
+        <div className="d-flex justify-content-center text-center">
+          <Pagination
+            style={{ padding: "15px" }}
+            variant="outlined"
+            count={moviesList.total_pages < 500 ? moviesList.total_pages : 500}
+            page={page}
+            onChange={handleChange}
+          />
+        </div>
       </Col>
     </Row>
   );

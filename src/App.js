@@ -15,14 +15,13 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./css/font.css";
-import VerticalMarquee from "./Components/VerticalMarquee/VerticalMarquee";
 
 function App() {
   return (
     <div style={{ backgroundColor: "#00000010" }}>
       <Routes>
         <Route path="/" exact element={<Login />} />
-        <Route path="/loader" exact element={<VerticalMarquee />} />
+        <Route path="/loader" exact element={"Hola"} />
         <Route
           path="/home"
           element={
