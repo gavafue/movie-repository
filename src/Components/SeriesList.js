@@ -1,5 +1,6 @@
 import Row from "react-bootstrap/Row";
 import React from "react";
+import { Container } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -70,36 +71,22 @@ const SeriesList = () => {
 
   return (
     <Row>
-      <Col xs={4} md={3} lg={2}>
-        <Divider style={{ marginTop: "10px" }} />
-        <List>
-          {genresList?.map((genre) => (
-            <ListItem
-              key={genre.id}
-              onClick={() => {
-                setGenreID(genre.id);
-                setSelectedGenre(genre.name);
-                setPage(1);
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                });
-              }}
-              disablePadding
-            >
-              <ListItemButton>
-                <ListItemText primary={genre.name} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-      </Col>
       <Col xs={8} md={9} lg={10}>
         <Row>
-          <h5 style={{ margin: "10px", textAlign: "center" }}>
-            {selectedGenre}
-          </h5>
+          <Container>
+            <Card
+              style={{
+                marginTop: "10px",
+                backgroundColor: "#212529",
+                color: "white",
+              }}
+            >
+              <h4 style={{ margin: "10px", textAlign: "center" }}>SERIES</h4>
+              <h6 style={{ margin: "10px", textAlign: "center" }}>
+                {selectedGenre}
+              </h6>
+            </Card>
+          </Container>
         </Row>
         <Row>
           {seriesList.results?.map((oneMovie, index) => {
@@ -121,7 +108,7 @@ const SeriesList = () => {
                       image={
                         oneMovie.poster_path
                           ? `https://image.tmdb.org/t/p/original${oneMovie.poster_path}`
-                          : `http://via.placeholder.com/700x1000.png`
+                          : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
                       }
                       alt={oneMovie.title}
                     />
@@ -139,7 +126,7 @@ const SeriesList = () => {
                       size="small"
                       color="primary"
                       onClick={() =>
-                        navigate(`/movies/details?movieID=${oneMovie.id}`)
+                        navigate(`/series/details?serieID=${oneMovie.id}`)
                       }
                     >
                       View details
@@ -159,6 +146,34 @@ const SeriesList = () => {
             onChange={handleChange}
           />
         </div>
+      </Col>
+      <Col xs={4} md={3} lg={2}>
+        <List>
+          {" "}
+          <Divider style={{ marginTop: "10px" }} />
+          {genresList?.map((genre) => (
+            <>
+              <ListItem
+                key={genre.id}
+                onClick={() => {
+                  setGenreID(genre.id);
+                  setSelectedGenre(genre.name);
+                  setPage(1);
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
+                disablePadding
+              >
+                <ListItemButton>
+                  <ListItemText primary={genre.name} />
+                </ListItemButton>
+              </ListItem>
+              <Divider />
+            </>
+          ))}
+        </List>
       </Col>
     </Row>
   );

@@ -1,6 +1,7 @@
 import Row from "react-bootstrap/Row";
 import React from "react";
 import Col from "react-bootstrap/Col";
+import { Container } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import swAlert from "sweetalert2";
@@ -10,13 +11,21 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions } from "@mui/material";
+import {
+  Button,
+  CardActionArea,
+  CardActions,
+  TextField,
+  ButtonGroup,
+  Paper,
+} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { Pagination } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 const MySwal = withReactContent(swAlert);
 
 const MoviesList = () => {
@@ -73,41 +82,78 @@ const MoviesList = () => {
   return (
     <Row>
       <Col xs={4} md={3} lg={2}>
-        <Divider style={{ marginTop: "10px" }} />
         <List>
+          {" "}
+          <Divider style={{ marginTop: "10px" }} />
           {genresList?.map((genre) => (
-            <ListItem
-              key={genre.id}
-              onClick={() => {
-                setGenreID(genre.id);
-                setSelectedGenre(genre.name);
-                setPage(1);
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                });
-              }}
-              disablePadding
-            >
-              <ListItemButton>
-                <ListItemText primary={genre.name} />
-              </ListItemButton>
-            </ListItem>
+            <>
+              <ListItem
+                key={genre.id}
+                onClick={() => {
+                  setGenreID(genre.id);
+                  setSelectedGenre(genre.name);
+                  setPage(1);
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
+                disablePadding
+              >
+                <ListItemButton>
+                  <ListItemText primary={genre.name} />
+                </ListItemButton>
+              </ListItem>
+              <Divider />
+            </>
           ))}
         </List>
-        <Divider />
       </Col>
       <Col xs={8} md={9} lg={10}>
         <Row>
-          <h5 style={{ margin: "10px", textAlign: "center" }}>
-            {selectedGenre}
-          </h5>
+          <Container>
+            <Card
+              style={{
+                marginTop: "10px",
+                backgroundColor: "#212529",
+                color: "white",
+              }}
+            >
+              <h4 style={{ margin: "10px", textAlign: "center" }}>MOVIES</h4>
+              <h6 style={{ margin: "10px", textAlign: "center" }}>
+                {selectedGenre}
+              </h6>
+            </Card>
+          </Container>
         </Row>
         <Row>
+          <Container>
+            <Paper style={{ margin: "10px 0px 10px 0px" }}>
+              <Row>
+                <Col className="d-flex align-items-center">
+                  <TextField
+                    id="outlined-basic"
+                    label={`Search`}
+                    variant="outlined"
+                    size="small"
+                  />
+                  <SearchIcon />
+                </Col>
+                <Col xs={9} className="d-flex justify-content-end">
+                  <ButtonGroup
+                    variant="contained"
+                    aria-label="outlined primary button group"
+                  >
+                    <Button size="small">Release date asc</Button>
+                    <Button size="small">Release date desc</Button>
+                    <Button size="small">Popularity asc</Button>
+                    <Button size="small">Popularity desc</Button>
+                  </ButtonGroup>
+                </Col>
+              </Row>
+            </Paper>
+          </Container>
           {moviesList.results?.map((oneMovie, index) => {
-            console.log(
-              `https://image.tmdb.org/t/p/original${oneMovie.poster_path}`
-            );
             return (
               <Col
                 xs={6}
@@ -123,7 +169,7 @@ const MoviesList = () => {
                       image={
                         oneMovie.poster_path
                           ? `https://image.tmdb.org/t/p/original${oneMovie.poster_path}`
-                          : `http://via.placeholder.com/700x1000.png`
+                          : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
                       }
                       alt={oneMovie.title}
                     />

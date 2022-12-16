@@ -16,6 +16,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./css/font.css";
+import SerieDetails from "./Components/SerieDetails";
 
 function App() {
   return (
@@ -54,6 +55,14 @@ function App() {
           element={
             <PrivateRoute>
               <SeriesList />
+            </PrivateRoute>
+          }
+        />
+         <Route
+          path="series/details"
+          element={
+            <PrivateRoute>
+              <SerieDetails />
             </PrivateRoute>
           }
         />

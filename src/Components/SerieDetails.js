@@ -11,33 +11,33 @@ import CardContent2 from "@mui/joy/CardContent";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Rating } from "@mui/material";
 
-const MovieDetails = () => {
+const SerieDetails = () => {
   const MySwal = withReactContent(swAlert);
   const navigate = useNavigate();
   const location = useLocation();
-  const [movieID, setMovieID] = useState("");
-  const [movieDetailsData, setMovieDetailsData] = useState([]);
+  const [serieID, setSerieID] = useState("");
+  const [serieDetailsData, setSerieDetailsData] = useState([]);
   const [genres, setGenres] = useState([]);
   const [productors, setProductors] = useState([]);
   const [countries, setCountries] = useState([]);
   const [spokenLanguages, setSpokenLanguages] = useState([]);
-  const [similarMovies, setSimilarMovies] = useState([]);
+  const [similarSeries, setSimilarSeries] = useState([]);
 
-  const extendedInfoAPI = `https://api.themoviedb.org/3/movie/${movieID}?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US
-    `;
-  const similarMoviesAPI = `https://api.themoviedb.org/3/movie/${movieID}/similar?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1`;
+  const extendedInfoAPI = `https://api.themoviedb.org/3/tv/${serieID}?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US`;
+
+  const similarSeriesAPI = `https://api.themoviedb.org/3/tv/${serieID}/similar?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1`;
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
-    const queryParamMovieID = query.get("movieID");
-    setMovieID(queryParamMovieID);
-    if (movieID !== "" && movieID !== undefined) {
+    const queryParamMovieID = query.get("serieID");
+    setSerieID(queryParamMovieID);
+    if (serieID !== "" && serieID !== undefined) {
       // Function to get info of the movie selected
       axios
         .get(extendedInfoAPI)
         .then((response) => {
           const data = response.data;
-          setMovieDetailsData(data);
+          setSerieDetailsData(data);
           const genresList = data.genres.map((genre) => genre.name);
           setGenres(genresList);
           const producersList = data.production_companies.map(
@@ -64,10 +64,10 @@ const MovieDetails = () => {
 
       //Function to get info about similar movies
       axios
-        .get(similarMoviesAPI)
+        .get(similarSeriesAPI)
         .then((response) => {
           const dataSimilarMovies = response.data.results;
-          setSimilarMovies(dataSimilarMovies.slice(0, 6));
+          setSimilarSeries(dataSimilarMovies.slice(0, 6));
         })
         .catch((error) =>
           MySwal.fire({
@@ -79,7 +79,7 @@ const MovieDetails = () => {
         );
     }
     // eslint-disable-next-line
-  }, [movieID]);
+  }, [serieID]);
 
   return (
     <Container
@@ -89,7 +89,7 @@ const MovieDetails = () => {
       <Card border="secondary">
         <Card.Header>
           <Card.Title>
-            {movieDetailsData.title} ({movieDetailsData.original_title})
+            {serieDetailsData.name} ({serieDetailsData.original_name})
           </Card.Title>
         </Card.Header>
         <Card.Body>
@@ -99,11 +99,11 @@ const MovieDetails = () => {
                 <Card className="bg-dark text-white">
                   <Card.Img
                     src={
-                      movieDetailsData.poster_path
-                        ? `https://image.tmdb.org/t/p/original${movieDetailsData.poster_path}`
+                      serieDetailsData.poster_path
+                        ? `https://image.tmdb.org/t/p/original${serieDetailsData.poster_path}`
                         : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
                     }
-                    alt={`Poster image from ${movieDetailsData.original_title}`}
+                    alt={`Poster image from ${serieDetailsData.original_name}`}
                   />
                 </Card>
               </Col>
@@ -111,12 +111,12 @@ const MovieDetails = () => {
                 <Row>
                   <Row>
                     <h5>Sinopsis:</h5>
-                    <p>{movieDetailsData.overview}</p>
+                    <p>{serieDetailsData.overview}</p>
                   </Row>
                   <Row>
                     <Col>
-                      <h6>Release Date:</h6>
-                      <p>{movieDetailsData.release_date}</p>
+                      <h6>First air date:</h6>
+                      <p>{serieDetailsData.first_air_date}</p>
                     </Col>
                     <Col>
                       <h6>Genres:</h6>
@@ -129,7 +129,7 @@ const MovieDetails = () => {
                       <Rating
                         name="detailsRating"
                         size="small"
-                        value={movieDetailsData?.vote_average || 0}
+                        value={serieDetailsData?.vote_average || 0}
                         precision={0.5}
                         max={10}
                         readOnly
@@ -151,10 +151,10 @@ const MovieDetails = () => {
                     </Col>
                   </Row>
                 </Row>
-                {movieDetailsData.homepage && (
+                {serieDetailsData.homepage && (
                   <Row>
                     <Col className="justify-content-center text-center">
-                      <a href={movieDetailsData.homepage}>
+                      <a href={serieDetailsData.homepage}>
                         <Button
                           variant="contained"
                           style={{ marginTop: "15px" }}
@@ -174,7 +174,7 @@ const MovieDetails = () => {
               >
                 <h5>Suggestions</h5>
                 <Row>
-                  {similarMovies?.map((movie, index) => {
+                  {similarSeries?.map((serie, index) => {
                     return (
                       <Col
                         key={index}
@@ -186,8 +186,8 @@ const MovieDetails = () => {
                         <Card2
                           sx={{ minHeight: "240px", cursor: "pointer" }}
                           onClick={() => {
-                            setMovieID(movie.id);
-                            navigate(`/movies/details?movieID=${movie.id}`);
+                            setSerieID(serie.id);
+                            navigate(`/series/details?serieID=${serie.id}`);
                             window.scrollTo({
                               top: 0,
                               behavior: "smooth",
@@ -197,17 +197,17 @@ const MovieDetails = () => {
                           <CardCover2>
                             <img
                               src={
-                                movie.poster_path
-                                  ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+                                serie.poster_path
+                                  ? `https://image.tmdb.org/t/p/original${serie.poster_path}`
                                   : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
                               }
                               srcSet={
-                                movie.poster_path
-                                  ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+                                serie.poster_path
+                                  ? `https://image.tmdb.org/t/p/original${serie.poster_path}`
                                   : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
                               }
                               loading="lazy"
-                              alt={movie.title}
+                              alt={serie.name}
                             />
                           </CardCover2>
                           <CardCover2
@@ -225,7 +225,7 @@ const MovieDetails = () => {
                             <Typography
                               sx={{ color: "white", fontSize: "14px" }}
                             >
-                              {movie.title}
+                              {serie.name}
                             </Typography>
                           </CardContent2>
                         </Card2>
@@ -241,4 +241,4 @@ const MovieDetails = () => {
     </Container>
   );
 };
-export default MovieDetails;
+export default SerieDetails;
