@@ -11,6 +11,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Fade from "@mui/material/Fade";
 import {
   Button,
   CardActionArea,
@@ -26,6 +29,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { Pagination } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Dropdown from "react-bootstrap/Dropdown";
+import MenuOpenRoundedIcon from "@mui/icons-material/MenuOpenRounded";
 const MySwal = withReactContent(swAlert);
 
 const MoviesList = () => {
@@ -54,6 +58,15 @@ const MoviesList = () => {
 
   const onClickSortMovies = (event) => {
     console.log(event.target);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
   useEffect(() => {
     const genresAPI =
@@ -109,7 +122,7 @@ const MoviesList = () => {
 
   return (
     <Row>
-      <Col xs={4} md={3} lg={2}>
+      <Col className="d-none d-md-block" md={3} lg={2}>
         <List>
           {" "}
           <Divider style={{ marginTop: "10px" }} />
@@ -136,7 +149,7 @@ const MoviesList = () => {
           ))}
         </List>
       </Col>
-      <Col xs={8} md={9} lg={10}>
+      <Col>
         <Row>
           <Container>
             <Card
@@ -146,10 +159,57 @@ const MoviesList = () => {
                 color: "white",
               }}
             >
-              <h4 style={{ margin: "10px", textAlign: "center" }}>MOVIES</h4>
-              <h6 style={{ margin: "10px", textAlign: "center" }}>
-                {selectedGenre}
-              </h6>
+              <Row>
+                <Col className="d-block d-md-none" xs={1}>
+                  <Button
+                    variant="contained"
+                    id="basic-button"
+                    aria-controls={open ? "basic-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                    size="large"
+                    sx={{ height: "100%" }}
+                  >
+                    <MenuOpenRoundedIcon
+                      sx={{ color: "white", fontSize: "40px" }}
+                    />
+                  </Button>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    TransitionComponent={Fade}
+                    MenuListProps={{
+                      "aria-labelledby": "basic-button",
+                    }}
+                  >
+                    {" "}
+                    {genresList?.map((genre, index) => (
+                      <MenuItem
+                        key={index + 1}
+                        onClick={() => {
+                          handleClose();
+                          setGenreID(genre.id);
+                          setSelectedGenre(genre.name);
+                          setPage(1);
+                        }}
+                      >
+                        {genre.name}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Col>
+                <Col>
+                  <h4 style={{ margin: "10px", textAlign: "center" }}>
+                    MOVIES
+                  </h4>
+                  <h6 style={{ margin: "10px", textAlign: "center" }}>
+                    {selectedGenre}
+                  </h6>
+                </Col>
+              </Row>
             </Card>
           </Container>
         </Row>
@@ -168,7 +228,7 @@ const MoviesList = () => {
                   />
                   <SearchIcon />
                 </Col>
-                <Col xs={8} className="d-flex justify-content-end">
+                <Col md={8} xs={4} className="d-flex justify-content-end">
                   <Dropdown className="d-inline mx-2">
                     <Dropdown.Toggle id="dropdown-autoclose-true">
                       Order by
