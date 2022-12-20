@@ -1,25 +1,28 @@
 import { Container, Col, Row } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
-import Divider from "@mui/material/Divider";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
 import Carousel from "react-bootstrap/Carousel";
 import axios from "axios";
 import React from "react";
 import {
   Typography,
-  Rating,
+  Paper,
   Card,
   CardContent,
   CardActions,
   Button,
   Chip,
+  Rating,
 } from "@mui/material";
 import CardJoy from "@mui/joy/Card";
 import CardCoverJoy from "@mui/joy/CardCover";
 import CardContentJoy from "@mui/joy/CardContent";
 import { useNavigate } from "react-router-dom";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
+import IconButton from "@mui/material/IconButton";
+import InfoIcon from "@mui/icons-material/Info";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -64,7 +67,7 @@ const Landing = () => {
     axios
       .get(trendingURL)
       .then((response) => {
-        const apiData = response.data.results.slice(0, 6);
+        const apiData = response.data.results.slice(0, 10);
         setTrending(apiData);
       })
       .catch((error) => console.log(error));
@@ -73,7 +76,7 @@ const Landing = () => {
   return (
     <Container style={{ marginTop: "10px" }}>
       <Row>
-        <Col xs={12} md={8}>
+        <Col xs={12} lg={7}>
           <h5 className="text-center">Top 6 movies</h5>
           <Carousel
             activeIndex={index}
@@ -82,11 +85,10 @@ const Landing = () => {
             interval={2000}
           >
             {popularFilms?.map((film, index) => {
-              console.log(film);
               return (
                 <Carousel.Item key={index}>
                   <CardJoy
-                    sx={{ minHeight: "80vh", cursor: "pointer" }}
+                    sx={{ minHeight: "75vh", cursor: "pointer" }}
                     onClick={() =>
                       navigate(`/movies/details?movieID=${film.id}`)
                     }
@@ -144,75 +146,63 @@ const Landing = () => {
             })}
           </Carousel>
         </Col>
-        <Col xs={12} md={4}>
+        <Col xs={12} lg={5}>
           <h5 className="text-center">Trending list</h5>
-          <Container style={{ height: "80vh" }}>
-            {trending.map((multimedia, index) => {
-              return (
-                <div
-                  key={index}
-                  style={{ alignItems: "flex-start" }}
-                  onClick={() => {
-                    if (multimedia.media_type === "movie") {
-                      navigate(`/movies/details?movieID=${multimedia.id}`);
-                    }
-                  }}
-                >
-                  <Row>
-                    <Col xs={3}>
-                      <ListItemAvatar className="d-flex justify-content-center">
-                        <Avatar
-                          style={{ heigth: "100vh" }}
-                          variant="square"
-                          alt={
-                            multimedia.title
-                              ? multimedia.title
-                              : multimedia.name
-                          }
-                          src={`https://image.tmdb.org/t/p/original${multimedia.poster_path}`}
-                        />
-                      </ListItemAvatar>
-                    </Col>
-                    <Col>
-                      <Row>
-                        <Col style={{ textAlign: "center" }}>
-                          {multimedia.title
-                            ? multimedia.title
-                            : multimedia.name}
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Typography
-                          sx={{ textAlign: "center", fontSize: "10px" }}
-                          color="text.primary"
-                        >
-                          {multimedia.media_type.toUpperCase()}
-                        </Typography>
-                      </Row>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs={9} className="d-flex justify-content-center">
-                      <Rating
-                        name="Rating"
-                        size="small"
-                        value={multimedia.vote_average}
-                        precision={0.5}
-                        max={10}
-                        readOnly
+          <Container style={{ height: "75vh" }}>
+            <Paper>
+              <ImageList sx={{ width: "100%", height: "75vh" }} cols={2}>
+                {trending.map((item) => {
+                  return (
+                    <ImageListItem key={item.img}>
+                      <img
+                        src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
+                        srcSet={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
+                        alt={item.title ? item.title : item.name}
+                        loading="lazy"
                       />
-                    </Col>
-                    <Col
-                      style={{ fontSize: "12px", alignItems: "center" }}
-                    >{`${JSON.stringify(multimedia.vote_average).slice(
-                      0,
-                      3
-                    )}/10`}</Col>
-                  </Row>
-                  <Divider variant="inset" component="li" />
-                </div>
-              );
-            })}
+                      <ImageListItemBar
+                        title={item.title ? item.title : item.name}
+                        subtitle={
+                          <Row className="d-flex justify-content-center align-items-center">
+                            <Col>
+                              <Rating
+                                name="read-only"
+                                value={item.vote_average * 0.5}
+                                max={5}
+                                precision={0.5}
+                                readOnly
+                                size="small"
+                              />
+                              {`${JSON.stringify(item.vote_average / 2).slice(
+                                0,
+                                3
+                              )}/5`}
+                            </Col>
+                          </Row>
+                        }
+                        actionIcon={
+                          <IconButton
+                            sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                            aria-label={`info about ${
+                              item.title ? item.title : item.name
+                            }`}
+                            onClick={() => {
+                              if (item.title) {
+                                navigate(`/movies/details?movieID=${item.id}`);
+                              } else {
+                                navigate(`/series/details?serieID=${item.id}`);
+                              }
+                            }}
+                          >
+                            <InfoIcon />
+                          </IconButton>
+                        }
+                      />
+                    </ImageListItem>
+                  );
+                })}
+              </ImageList>
+            </Paper>
           </Container>
         </Col>
       </Row>
