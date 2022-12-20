@@ -114,6 +114,7 @@ const Landing = () => {
                     <CardCoverJoy>
                       <img
                         className="d-none d-sm-flex"
+                        style={{ width: "100%", minHeight: "100%" }}
                         src={`https://image.tmdb.org/t/p/original${film.backdrop_path}`}
                         srcSet={`https://image.tmdb.org/t/p/original${film.backdrop_path}`}
                         loading="lazy"
