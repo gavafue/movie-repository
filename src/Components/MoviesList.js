@@ -16,7 +16,6 @@ import {
   CardActionArea,
   CardActions,
   TextField,
-  ButtonGroup,
   Paper,
 } from "@mui/material";
 import Divider from "@mui/material/Divider";
@@ -26,6 +25,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { Pagination } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import Dropdown from "react-bootstrap/Dropdown";
 const MySwal = withReactContent(swAlert);
 
 const MoviesList = () => {
@@ -35,23 +35,33 @@ const MoviesList = () => {
   const [genreID, setGenreID] = useState(28);
   const [selectedGenre, setSelectedGenre] = useState("Action");
   const [page, setPage] = useState(1);
+  const [search, setSearchInput] = useState("");
   const fecha = new Date();
   const dia = fecha.getDate();
   const mesActual = fecha.getMonth() + 1;
   const año = fecha.getFullYear();
 
-  const handleChange = (event, value) => {
+  const handleChangePages = (event, value) => {
     setPage(value);
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   };
+  const handleChangeSearchInput = (event) => {
+    setSearchInput(event.target.value);
+  };
+
+  const onClickSortMovies = (event) => {
+    console.log(event.target);
+  };
   useEffect(() => {
     const genresAPI =
       "https://api.themoviedb.org/3/genre/movie/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
     const discoverApi = `
     https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=release_date.desc&include_adult=false&page=${page}&release_date.lte=${año}-${mesActual}-${dia}&with_genres=${genreID}`;
+    const searchApi = `
+    https://api.themoviedb.org/3/search/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&query=${search}&page=${page}&include_adult=false`;
 
     axios
       // eslint-disable-next-line
@@ -62,22 +72,40 @@ const MoviesList = () => {
       })
       .catch((error) => console.log(error.message));
 
-    axios
-      // eslint-disable-next-line
-      .get(discoverApi)
-      .then((response) => {
-        const apiData = response.data;
-        setMoviesList(apiData);
-      })
-      .catch((error) =>
-        MySwal.fire({
-          icon: "error",
-          title: "Ooops!...",
-          text: `There were an error: ${error}`,
+    if ((search !== null) & (search !== "")) {
+      axios
+        // eslint-disable-next-line
+        .get(searchApi)
+        .then((response) => {
+          const apiData = response.data;
+          setMoviesList(apiData);
         })
-      );
+        .catch((error) =>
+          MySwal.fire({
+            icon: "error",
+            title: "Ooops!...",
+            text: `There were an error: ${error}`,
+          })
+        );
+    } else {
+      axios
+        // eslint-disable-next-line
+        .get(discoverApi)
+        .then((response) => {
+          const apiData = response.data;
+          setMoviesList(apiData);
+        })
+        .catch((error) =>
+          MySwal.fire({
+            icon: "error",
+            title: "Ooops!...",
+            text: `There were an error: ${error}`,
+          })
+        );
+    }
+
     // eslint-disable-next-line
-  }, [genreID, page]);
+  }, [genreID, page, search]);
 
   return (
     <Row>
@@ -85,10 +113,9 @@ const MoviesList = () => {
         <List>
           {" "}
           <Divider style={{ marginTop: "10px" }} />
-          {genresList?.map((genre) => (
-            <>
+          {genresList?.map((genre, index) => (
+            <div key={index}>
               <ListItem
-                key={genre.id}
                 onClick={() => {
                   setGenreID(genre.id);
                   setSelectedGenre(genre.name);
@@ -105,7 +132,7 @@ const MoviesList = () => {
                 </ListItemButton>
               </ListItem>
               <Divider />
-            </>
+            </div>
           ))}
         </List>
       </Col>
@@ -136,19 +163,42 @@ const MoviesList = () => {
                     label={`Search`}
                     variant="outlined"
                     size="small"
+                    onChange={handleChangeSearchInput}
+                    fullWidth
                   />
                   <SearchIcon />
                 </Col>
-                <Col xs={9} className="d-flex justify-content-end">
-                  <ButtonGroup
-                    variant="contained"
-                    aria-label="outlined primary button group"
-                  >
-                    <Button size="small">Release date asc</Button>
-                    <Button size="small">Release date desc</Button>
-                    <Button size="small">Popularity asc</Button>
-                    <Button size="small">Popularity desc</Button>
-                  </ButtonGroup>
+                <Col xs={8} className="d-flex justify-content-end">
+                  <Dropdown className="d-inline mx-2">
+                    <Dropdown.Toggle id="dropdown-autoclose-true">
+                      Order by
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        active
+                        as="button"
+                        onClick={onClickSortMovies}
+                        eventKey="recent"
+                      >
+                        Recent
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as="button"
+                        eventKey="popularity"
+                        onClick={onClickSortMovies}
+                      >
+                        Popularity
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as="button"
+                        eventKey="alphabetical"
+                        onClick={onClickSortMovies}
+                      >
+                        Alphabetical
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </Col>
               </Row>
             </Paper>
@@ -178,7 +228,7 @@ const MoviesList = () => {
                         {oneMovie.title}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {oneMovie.overview.substring(0, 80)}...
+                        {oneMovie?.overview?.substring(0, 80)}...
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -204,7 +254,7 @@ const MoviesList = () => {
             variant="outlined"
             count={moviesList.total_pages < 500 ? moviesList.total_pages : 500}
             page={page}
-            onChange={handleChange}
+            onChange={handleChangePages}
           />
         </div>
       </Col>

@@ -11,13 +11,21 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions } from "@mui/material";
+import {
+  Button,
+  CardActionArea,
+  CardActions,
+  TextField,
+  Paper,
+} from "@mui/material";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { Pagination } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import Dropdown from "react-bootstrap/Dropdown";
 const MySwal = withReactContent(swAlert);
 
 const SeriesList = () => {
@@ -27,22 +35,28 @@ const SeriesList = () => {
   const [genreID, setGenreID] = useState(10759);
   const [selectedGenre, setSelectedGenre] = useState("Action & Adventure");
   const [page, setPage] = useState(1);
+  const [search, setSearchInput] = useState("");
   const fecha = new Date();
   const dia = fecha.getDate();
   const mesActual = fecha.getMonth() + 1;
   const año = fecha.getFullYear();
 
-  const handleChange = (event, value) => {
+  const handleChangePages = (event, value) => {
     setPage(value);
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   };
+  const handleChangeSearchInput = (event) => {
+    setSearchInput(event.target.value);
+  };
   useEffect(() => {
     const genresAPI =
       "https://api.themoviedb.org/3/genre/tv/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
     const discoverTVProgramsAPI = `https://api.themoviedb.org/3/discover/tv?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=first_air_date.desc&first_air_date.lte=${año}-${mesActual}-${dia}&page=${page}&with_genres=${genreID}&include_null_first_air_dates=false`;
+
+    const searchApi = `https://api.themoviedb.org/3/search/tv?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1&query=${search}&include_adult=false`;
     axios
       // eslint-disable-next-line
       .get(genresAPI)
@@ -51,23 +65,39 @@ const SeriesList = () => {
         setGenresList(apiData);
       })
       .catch((error) => console.log(error.message));
-
-    axios
-      // eslint-disable-next-line
-      .get(discoverTVProgramsAPI)
-      .then((response) => {
-        const apiData = response.data;
-        setSeriesList(apiData);
-      })
-      .catch((error) =>
-        MySwal.fire({
-          icon: "error",
-          title: "Ooops!...",
-          text: `There were an error: ${error}`,
+    if ((search !== null) & (search !== "")) {
+      axios
+        // eslint-disable-next-line
+        .get(searchApi)
+        .then((response) => {
+          const apiData = response.data;
+          setSeriesList(apiData);
         })
-      );
+        .catch((error) =>
+          MySwal.fire({
+            icon: "error",
+            title: "Ooops!...",
+            text: `There were an error: ${error}`,
+          })
+        );
+    } else {
+      axios
+        // eslint-disable-next-line
+        .get(discoverTVProgramsAPI)
+        .then((response) => {
+          const apiData = response.data;
+          setSeriesList(apiData);
+        })
+        .catch((error) =>
+          MySwal.fire({
+            icon: "error",
+            title: "Ooops!...",
+            text: `There were an error: ${error}`,
+          })
+        );
+    }
     // eslint-disable-next-line
-  }, [genreID, page]);
+  }, [genreID, page, search]);
 
   return (
     <Row>
@@ -86,6 +116,44 @@ const SeriesList = () => {
                 {selectedGenre}
               </h6>
             </Card>
+          </Container>
+        </Row>
+        <Row>
+          <Container>
+            <Paper style={{ margin: "10px 0px 10px 0px" }}>
+              <Row>
+                <Col className="d-flex align-items-center">
+                  <TextField
+                    id="outlined-basic"
+                    label={`Search`}
+                    variant="outlined"
+                    size="small"
+                    onChange={handleChangeSearchInput}
+                    fullWidth
+                  />
+                  <SearchIcon />
+                </Col>
+                <Col xs={8} className="d-flex justify-content-end">
+                  <Dropdown className="d-inline mx-2">
+                    <Dropdown.Toggle id="dropdown-autoclose-true">
+                      Order by
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      <Dropdown.Item active as="button" eventKey="recent">
+                        Recent
+                      </Dropdown.Item>
+                      <Dropdown.Item as="button" eventKey="popularity">
+                        Popularity
+                      </Dropdown.Item>
+                      <Dropdown.Item as="button" eventKey="alphabetical">
+                        Alphabetical
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Col>
+              </Row>
+            </Paper>
           </Container>
         </Row>
         <Row>
@@ -143,7 +211,7 @@ const SeriesList = () => {
             variant="outlined"
             count={seriesList.total_pages < 500 ? seriesList.total_pages : 500}
             page={page}
-            onChange={handleChange}
+            onChange={handleChangePages}
           />
         </div>
       </Col>
