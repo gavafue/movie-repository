@@ -160,7 +160,7 @@ const MoviesList = () => {
               }}
             >
               <Row>
-                <Col className="d-block d-md-none" xs={1}>
+                <Col className="d-block d-md-none" xs={2}>
                   <Button
                     variant="contained"
                     id="basic-button"

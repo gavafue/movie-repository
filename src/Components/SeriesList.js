@@ -126,7 +126,7 @@ const SeriesList = () => {
               }}
             >
               <Row>
-                <Col xs={2}>
+                <Col className="d-block d-md-none" xs={2}>
                   {" "}
                   <Button
                     variant="contained"
@@ -195,7 +195,7 @@ const SeriesList = () => {
                   />
                   <SearchIcon />
                 </Col>
-                <Col xs={8} className="d-flex justify-content-end">
+                <Col md={8} xs={4} className="d-flex justify-content-end">
                   <Dropdown className="d-inline mx-2">
                     <Dropdown.Toggle id="dropdown-autoclose-true">
                       Order by
