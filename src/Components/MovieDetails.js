@@ -10,6 +10,20 @@ import CardCover2 from "@mui/joy/CardCover";
 import CardContent2 from "@mui/joy/CardContent";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Rating } from "@mui/material";
+import YouTube, { YouTubeProps } from "react-youtube";
+
+const opts = {
+  height: "390",
+  width: "640",
+  playerVars: {
+    // https://developers.google.com/youtube/player_parameters
+    autoplay: 1,
+  },
+};
+const onReadyVideo = (event) => {
+  // access to player in all event handlers via event.target
+  event.target.pauseVideo();
+};
 
 const MovieDetails = () => {
   const MySwal = withReactContent(swAlert);
@@ -22,11 +36,13 @@ const MovieDetails = () => {
   const [countries, setCountries] = useState([]);
   const [spokenLanguages, setSpokenLanguages] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([]);
+  const [videoTrailer, setVideoTrailer] = useState({});
 
   const extendedInfoAPI = `https://api.themoviedb.org/3/movie/${movieID}?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US
     `;
   const similarMoviesAPI = `https://api.themoviedb.org/3/movie/${movieID}/similar?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1`;
 
+  const videosApi = `https://api.themoviedb.org/3/movie/${movieID}/videos?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US`;
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const queryParamMovieID = query.get("movieID");
@@ -77,10 +93,34 @@ const MovieDetails = () => {
             icon: "error",
           })
         );
+      //Function to get videos
+
+      axios
+        .get(videosApi)
+        .then((response) => {
+          const dataVideos = response.data.results;
+
+          if (dataVideos) {
+            const trailer = dataVideos.find(
+              (video) => video.name === "Official Trailer"
+            );
+            if (trailer) {
+              setVideoTrailer(trailer);
+            }
+          }
+        })
+        .catch((error) =>
+          MySwal.fire({
+            title: "Oops!",
+            text: `There was an error, please
+          try again in a few moments. Error message:${error}`,
+            icon: "error",
+          })
+        );
     }
     // eslint-disable-next-line
   }, [movieID]);
-
+  console.log(videoTrailer);
   return (
     <Container
       className="w-100"
@@ -153,16 +193,30 @@ const MovieDetails = () => {
                 </Row>
                 {movieDetailsData.homepage && (
                   <Row>
-                    <Col className="justify-content-center text-center">
-                      <a href={movieDetailsData.homepage}>
-                        <Button
-                          variant="contained"
-                          style={{ marginTop: "15px" }}
-                        >
-                          Official site
-                        </Button>
-                      </a>
-                    </Col>
+                    <Row>
+                      <Col className="justify-content-center text-center">
+                        <a href={movieDetailsData.homepage}>
+                          <Button
+                            variant="contained"
+                            style={{ marginTop: "15px" }}
+                          >
+                            Official site
+                          </Button>
+                        </a>
+                      </Col>
+                    </Row>
+                    {videoTrailer && (
+                      <Row>
+                        <h5>Trailer:</h5>
+                        <iframe
+                          id="player"
+                          type="text/html"
+                          width="100%"
+                          height="400"
+                          src={`http://www.youtube.com/embed/${videoTrailer.key}?origin=http://localhost:3000/`}
+                        ></iframe>
+                      </Row>
+                    )}
                   </Row>
                 )}
               </Col>
