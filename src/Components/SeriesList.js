@@ -40,6 +40,7 @@ const SeriesList = () => {
   const [selectedGenre, setSelectedGenre] = useState("Action & Adventure");
   const [page, setPage] = useState(1);
   const [search, setSearchInput] = useState("");
+  const [sortSeriesBy, setSeriesSortBy] = useState("popularity.desc");
   const fecha = new Date();
   const dia = fecha.getDate();
   const mesActual = fecha.getMonth() + 1;
@@ -68,7 +69,7 @@ const SeriesList = () => {
   useEffect(() => {
     const genresAPI =
       "https://api.themoviedb.org/3/genre/tv/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
-    const discoverTVProgramsAPI = `https://api.themoviedb.org/3/discover/tv?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=first_air_date.desc&first_air_date.lte=${año}-${mesActual}-${dia}&page=${page}&with_genres=${genreID}&include_null_first_air_dates=false`;
+    const discoverTVProgramsAPI = `https://api.themoviedb.org/3/discover/tv?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=${sortSeriesBy}&first_air_date.lte=${año}-${mesActual}-${dia}&page=${page}&with_genres=${genreID}&include_null_first_air_dates=false`;
 
     const searchApi = `https://api.themoviedb.org/3/search/tv?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1&query=${search}&include_adult=false`;
     axios
@@ -111,7 +112,7 @@ const SeriesList = () => {
         );
     }
     // eslint-disable-next-line
-  }, [genreID, page, search]);
+  }, [genreID, page, search,sortSeriesBy]);
 
   return (
     <Row>
@@ -184,7 +185,7 @@ const SeriesList = () => {
           <Container>
             <Paper style={{ margin: "10px 0px 10px 0px" }}>
               <Row>
-                <Col className="d-flex align-items-center">
+                <Col md={4} xs={8} className="d-flex align-items-center">
                   <TextField
                     id="outlined-basic"
                     label={`Search`}
@@ -195,25 +196,46 @@ const SeriesList = () => {
                   />
                   <SearchIcon />
                 </Col>
-                <Col md={8} xs={4} className="d-flex justify-content-end">
-                  <Dropdown className="d-inline mx-2">
-                    <Dropdown.Toggle id="dropdown-autoclose-true">
-                      Order by
-                    </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                      <Dropdown.Item active as="button" eventKey="recent">
-                        Recent
-                      </Dropdown.Item>
-                      <Dropdown.Item as="button" eventKey="popularity">
-                        Popularity
-                      </Dropdown.Item>
-                      <Dropdown.Item as="button" eventKey="alphabetical">
-                        Alphabetical
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Col>
+                {!search && (
+                  <Col className="d-flex justify-content-end">
+                    <Dropdown className="d-inline mx-2">
+                      <Dropdown.Toggle
+                        id="dropdown-autoclose-true"
+                        variant="secondary"
+                      >
+                        Order by
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu variant="dark">
+                        <Dropdown.Item
+                          active={sortSeriesBy === "popularity.desc"}
+                          onClick={() => setSeriesSortBy("popularity.desc")}
+                          as="button"
+                          eventKey="popularity"
+                        >
+                          Popularity
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          active={sortSeriesBy === "first_air_date.desc"}
+                          onClick={() => setSeriesSortBy("first_air_date.desc")}
+                          as="button"
+                          eventKey="recent"
+                        >
+                          Release date
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          active={sortSeriesBy === "original_title.asc"}
+                          onClick={() => setSeriesSortBy("original_title.asc")}
+                          as="button"
+                          eventKey="alphabetical"
+                        >
+                          Alphabetical
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                )}
               </Row>
             </Paper>
           </Container>

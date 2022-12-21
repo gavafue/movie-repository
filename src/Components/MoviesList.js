@@ -40,6 +40,7 @@ const MoviesList = () => {
   const [selectedGenre, setSelectedGenre] = useState("Action");
   const [page, setPage] = useState(1);
   const [search, setSearchInput] = useState("");
+  const [sortMoviesBy, setMoviesSortBy] = useState("popularity.desc");
   const fecha = new Date();
   const dia = fecha.getDate();
   const mesActual = fecha.getMonth() + 1;
@@ -56,10 +57,6 @@ const MoviesList = () => {
     setSearchInput(event.target.value);
   };
 
-  const onClickSortMovies = (event) => {
-    console.log(event.target);
-  };
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -72,10 +69,10 @@ const MoviesList = () => {
     const genresAPI =
       "https://api.themoviedb.org/3/genre/movie/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
     const discoverApi = `
-    https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=release_date.desc&include_adult=false&page=${page}&release_date.lte=${año}-${mesActual}-${dia}&with_genres=${genreID}`;
+    https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=${sortMoviesBy}&include_adult=false&page=${page}&release_date.lte=${año}-${mesActual}-${dia}&with_genres=${genreID}`;
     const searchApi = `
     https://api.themoviedb.org/3/search/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&query=${search}&page=${page}&include_adult=false`;
-
+    console.log(discoverApi);
     axios
       // eslint-disable-next-line
       .get(genresAPI)
@@ -118,7 +115,7 @@ const MoviesList = () => {
     }
 
     // eslint-disable-next-line
-  }, [genreID, page, search]);
+  }, [genreID, page, search, sortMoviesBy]);
 
   return (
     <Row>
@@ -217,7 +214,7 @@ const MoviesList = () => {
           <Container>
             <Paper style={{ margin: "10px 0px 10px 0px" }}>
               <Row>
-                <Col className="d-flex align-items-center">
+                <Col md={4} xs={4} className="d-flex align-items-center">
                   <TextField
                     id="outlined-basic"
                     label={`Search`}
@@ -228,38 +225,45 @@ const MoviesList = () => {
                   />
                   <SearchIcon />
                 </Col>
-                <Col md={8} xs={4} className="d-flex justify-content-end">
-                  <Dropdown className="d-inline mx-2">
-                    <Dropdown.Toggle id="dropdown-autoclose-true">
-                      Order by
-                    </Dropdown.Toggle>
+                {!search && (
+                  <Col className="d-flex justify-content-end">
+                    <Dropdown className="d-inline mx-2">
+                      <Dropdown.Toggle
+                        id="dropdown-autoclose-true"
+                        variant="secondary"
+                      >
+                        Order by
+                      </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        active
-                        as="button"
-                        onClick={onClickSortMovies}
-                        eventKey="recent"
-                      >
-                        Recent
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        as="button"
-                        eventKey="popularity"
-                        onClick={onClickSortMovies}
-                      >
-                        Popularity
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        as="button"
-                        eventKey="alphabetical"
-                        onClick={onClickSortMovies}
-                      >
-                        Alphabetical
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Col>
+                      <Dropdown.Menu variant="dark">
+                        <Dropdown.Item
+                          active={sortMoviesBy === "popularity.desc"}
+                          onClick={() => setMoviesSortBy("popularity.desc")}
+                          as="button"
+                          eventKey="popularity"
+                        >
+                          Popularity
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          active={sortMoviesBy === "release_date.desc"}
+                          onClick={() => setMoviesSortBy("release_date.desc")}
+                          as="button"
+                          eventKey="recent"
+                        >
+                          Release date
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          active={sortMoviesBy === "original_title.asc"}
+                          onClick={() => setMoviesSortBy("original_title.asc")}
+                          as="button"
+                          eventKey="alphabetical"
+                        >
+                          Alphabetical
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                )}
               </Row>
             </Paper>
           </Container>

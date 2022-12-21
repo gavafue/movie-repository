@@ -108,10 +108,10 @@ const SerieDetails = () => {
           })
         );
     }
-    console.log(serieDetailsData);
+
     // eslint-disable-next-line
   }, [serieID, window.location.search]);
-  console.log(videoTrailer);
+
   return (
     <Container
       className="w-100"

@@ -26,7 +26,7 @@ const MovieDetails = () => {
 
   const extendedInfoAPI = `https://api.themoviedb.org/3/movie/${movieID}?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US
     `;
-  const similarMoviesAPI = `https://api.themoviedb.org/3/movie/${movieID}/similar?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1`;
+  const similarMoviesAPI = `https://api.themoviedb.org/3/movie/${movieID}/similar?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1&sort_by=popularity.desc`;
 
   const videosApi = `https://api.themoviedb.org/3/movie/${movieID}/videos?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US`;
   useEffect(() => {
@@ -112,7 +112,7 @@ const MovieDetails = () => {
     }
     // eslint-disable-next-line
   }, [movieID, window.location.search]);
-  console.log(videoTrailer);
+  console.log(movieDetailsData);
   return (
     <Container
       className="w-100"
