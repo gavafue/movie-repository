@@ -10,20 +10,6 @@ import CardCover2 from "@mui/joy/CardCover";
 import CardContent2 from "@mui/joy/CardContent";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Rating } from "@mui/material";
-import YouTube, { YouTubeProps } from "react-youtube";
-
-const opts = {
-  height: "390",
-  width: "640",
-  playerVars: {
-    // https://developers.google.com/youtube/player_parameters
-    autoplay: 1,
-  },
-};
-const onReadyVideo = (event) => {
-  // access to player in all event handlers via event.target
-  event.target.pauseVideo();
-};
 
 const MovieDetails = () => {
   const MySwal = withReactContent(swAlert);
@@ -36,7 +22,7 @@ const MovieDetails = () => {
   const [countries, setCountries] = useState([]);
   const [spokenLanguages, setSpokenLanguages] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([]);
-  const [videoTrailer, setVideoTrailer] = useState({});
+  const [videoTrailer, setVideoTrailer] = useState(undefined);
 
   const extendedInfoAPI = `https://api.themoviedb.org/3/movie/${movieID}?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US
     `;
@@ -47,6 +33,10 @@ const MovieDetails = () => {
     const query = new URLSearchParams(location.search);
     const queryParamMovieID = query.get("movieID");
     setMovieID(queryParamMovieID);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
     if (movieID !== "" && movieID !== undefined) {
       // Function to get info of the movie selected
       axios
@@ -102,10 +92,12 @@ const MovieDetails = () => {
 
           if (dataVideos) {
             const trailer = dataVideos.find(
-              (video) => video.name === "Official Trailer"
+              (video) => video.type === "Trailer"
             );
             if (trailer) {
               setVideoTrailer(trailer);
+            } else {
+              setVideoTrailer(undefined);
             }
           }
         })
@@ -119,7 +111,7 @@ const MovieDetails = () => {
         );
     }
     // eslint-disable-next-line
-  }, [movieID]);
+  }, [movieID, window.location.search]);
   console.log(videoTrailer);
   return (
     <Container
@@ -205,18 +197,21 @@ const MovieDetails = () => {
                         </a>
                       </Col>
                     </Row>
-                    {videoTrailer && (
-                      <Row>
-                        <h5>Trailer:</h5>
-                        <iframe
-                          id="player"
-                          type="text/html"
-                          width="100%"
-                          height="400"
-                          src={`http://www.youtube.com/embed/${videoTrailer.key}?origin=http://localhost:3000/`}
-                        ></iframe>
-                      </Row>
-                    )}
+                    <Row>
+                      {videoTrailer && (
+                        <Row>
+                          <h5>Trailer:</h5>
+                          <iframe
+                            title={videoTrailer.name}
+                            id="player"
+                            type="text/html"
+                            width="100%"
+                            height="400"
+                            src={`http://www.youtube.com/embed/${videoTrailer.key}?origin=http://localhost:3000/`}
+                          ></iframe>
+                        </Row>
+                      )}
+                    </Row>
                   </Row>
                 )}
               </Col>

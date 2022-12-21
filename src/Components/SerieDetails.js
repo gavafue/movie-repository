@@ -22,15 +22,20 @@ const SerieDetails = () => {
   const [countries, setCountries] = useState([]);
   const [spokenLanguages, setSpokenLanguages] = useState([]);
   const [similarSeries, setSimilarSeries] = useState([]);
+  const [videoTrailer, setVideoTrailer] = useState(undefined);
 
   const extendedInfoAPI = `https://api.themoviedb.org/3/tv/${serieID}?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US`;
 
   const similarSeriesAPI = `https://api.themoviedb.org/3/tv/${serieID}/similar?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1`;
-
+  const videosApi = `https://api.themoviedb.org/3/tv/${serieID}/videos?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US`;
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const queryParamMovieID = query.get("serieID");
     setSerieID(queryParamMovieID);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
     if (serieID !== "" && serieID !== undefined) {
       // Function to get info of the movie selected
       axios
@@ -77,10 +82,36 @@ const SerieDetails = () => {
             icon: "error",
           })
         );
-    }
-    // eslint-disable-next-line
-  }, [serieID]);
+      //Function to get video trailer
+      axios
+        .get(videosApi)
+        .then((response) => {
+          const dataVideos = response.data.results;
 
+          if (dataVideos) {
+            const trailer = dataVideos.find(
+              (video) => video.type === "Trailer"
+            );
+            if (trailer) {
+              setVideoTrailer(trailer);
+            } else {
+              setVideoTrailer(undefined);
+            }
+          }
+        })
+        .catch((error) =>
+          MySwal.fire({
+            title: "Oops!",
+            text: `There was an error, please
+          try again in a few moments. Error message:${error}`,
+            icon: "error",
+          })
+        );
+    }
+    console.log(serieDetailsData);
+    // eslint-disable-next-line
+  }, [serieID, window.location.search]);
+  console.log(videoTrailer);
   return (
     <Container
       className="w-100"
@@ -150,6 +181,22 @@ const SerieDetails = () => {
                       <p>{spokenLanguages.join(", ")}.</p>
                     </Col>
                   </Row>
+                  <Row>
+                    <Col>
+                      <h6>Number of seasons:</h6>
+                      <p> {serieDetailsData.number_of_seasons}.</p>
+                    </Col>
+                    <Col>
+                      <h6>Number of episodes:</h6>
+                      <p>{serieDetailsData.number_of_episodes}.</p>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <h6>Status:</h6>
+                      <p>{serieDetailsData.status}.</p>
+                    </Col>
+                  </Row>
                 </Row>
                 {serieDetailsData.homepage && (
                   <Row>
@@ -163,6 +210,19 @@ const SerieDetails = () => {
                         </Button>
                       </a>
                     </Col>
+                  </Row>
+                )}
+                {videoTrailer && (
+                  <Row>
+                    <h5>Trailer:</h5>
+                    <iframe
+                      title={videoTrailer.name}
+                      id="player"
+                      type="text/html"
+                      width="100%"
+                      height="400"
+                      src={`http://www.youtube.com/embed/${videoTrailer.key}?origin=http://localhost:3000/`}
+                    ></iframe>
                   </Row>
                 )}
               </Col>
