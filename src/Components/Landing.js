@@ -35,20 +35,20 @@ const Landing = () => {
   const [popularFilms, setPopularFilms] = useState([]);
   const [trending, setTrending] = useState([]);
   const [genres, setGenresList] = useState([]);
+  const [nextMovies, setNextMovies] = useState([]);
   const fecha = new Date();
   const diaActual = fecha.getDate();
   const mesActual = fecha.getMonth() + 1;
   const añoActual = fecha.getFullYear();
 
-  const fechaPlusThirty = new Date();
-  fechaPlusThirty.setDate(fecha.getDate() + 365);
-  const diaPlusThirty = fechaPlusThirty.getDate();
-  const mesPlusThirty = fechaPlusThirty.getMonth() + 1;
-  const añoPlusThirty = fechaPlusThirty.getFullYear();
-
+  const popularFilmsURL =
+    "https://api.themoviedb.org/3/movie/popular?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1";
+  const trendingURL =
+    "https://api.themoviedb.org/3/trending/all/day?api_key=51b3e2f36ad739cff7692a885496b3f8";
+  const nextMoviesAPI = `https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&primary_release_date.gte=${añoActual}-${mesActual}-${diaActual}&sort_by=popularity.desc`;
+  const genresAPI =
+    "https://api.themoviedb.org/3/genre/movie/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
   useEffect(() => {
-    const genresAPI =
-      "https://api.themoviedb.org/3/genre/movie/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
     axios
       // eslint-disable-next-line
       .get(genresAPI)
@@ -57,14 +57,7 @@ const Landing = () => {
         setGenresList(apiData);
       })
       .catch((error) => console.log(error.message));
-  }, []);
-  const popularFilmsURL =
-    "https://api.themoviedb.org/3/movie/popular?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1";
-  const trendingURL =
-    "https://api.themoviedb.org/3/trending/all/day?api_key=51b3e2f36ad739cff7692a885496b3f8";
-  const nextMovies = `https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=popularity.desc&include_adult=false&&page=1&release_date.gte=${añoActual}-${mesActual}-${diaActual}`;
 
-  useEffect(() => {
     axios
       .get(popularFilmsURL)
       .then((response) => {
@@ -83,13 +76,14 @@ const Landing = () => {
       })
       .catch((error) => console.log(error));
     axios
-      .get(nextMovies)
+      .get(nextMoviesAPI)
       .then((response) => {
         const apiData = response.data.results.slice(0, 10);
-        console.log(apiData);
+        setNextMovies(apiData);
       })
       .catch((error) => console.log(error));
   }, []);
+  console.log(nextMovies);
 
   return (
     <Container style={{ marginTop: "10px" }}>
