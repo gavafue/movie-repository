@@ -1,7 +1,8 @@
 import { Container, Col, Row } from "react-bootstrap";
 import { useState, useEffect } from "react";
-
-// import Carousel from "react-bootstrap/Carousel";
+import "../css/carousel.css";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import axios from "axios";
 import React from "react";
 import {
@@ -121,7 +122,13 @@ const Landing = () => {
       <Row>
         <Col xs={12} lg={7}>
           <h5 className="text-center">Top 6 movies</h5>
-          <Carousel autoplay arrows autoplaySpeed={2500}>
+          <Carousel
+            autoplay
+            arrows
+            prevArrow={<ArrowBackIcon />}
+            nextArrow={<ArrowForwardIcon />}
+            autoplaySpeed={2500}
+          >
             {popularFilms?.map((film, index) => {
               return (
                 <div key={index}>
@@ -255,14 +262,13 @@ const Landing = () => {
         </Col>
       </Row>
       <Row style={{ marginTop: "10px" }}>
-      <h5 className="text-center">Upcoming movies.</h5>
+        <h5 className="text-center">Upcoming movies.</h5>
         <Container>
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
               <Carousel
                 className="d-none d-lg-block "
                 autoplay
-                arrows
                 autoplaySpeed={2000}
                 dotPosition="right"
               >
@@ -349,7 +355,6 @@ const Landing = () => {
               <Carousel
                 className="d-xs-block d-lg-none "
                 autoplay
-                arrows
                 autoplaySpeed={2000}
                 dotPosition="right"
               >
