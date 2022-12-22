@@ -1,7 +1,7 @@
 import { Container, Col, Row } from "react-bootstrap";
 import { useState, useEffect } from "react";
 
-import Carousel from "react-bootstrap/Carousel";
+// import Carousel from "react-bootstrap/Carousel";
 import axios from "axios";
 import React from "react";
 import {
@@ -9,14 +9,15 @@ import {
   Paper,
   Card,
   CardContent,
-  CardActions,
-  Button,
   Chip,
   Rating,
 } from "@mui/material";
 import CardJoy from "@mui/joy/Card";
 import CardCoverJoy from "@mui/joy/CardCover";
 import CardContentJoy from "@mui/joy/CardContent";
+import CardOverflow from "@mui/joy/CardOverflow";
+import Divider from "@mui/joy/Divider";
+import AspectRatio from "@mui/joy/AspectRatio";
 import { useNavigate } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -25,16 +26,10 @@ import IconButton from "@mui/material/IconButton";
 import InfoIcon from "@mui/icons-material/Info";
 import swAlert from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-
+import { Carousel } from "antd";
 const Landing = () => {
   const MySwal = withReactContent(swAlert);
   const navigate = useNavigate();
-  const [index, setIndex] = useState(0);
-
-  const handleSelect = (selectedIndex, e) => {
-    setIndex(selectedIndex);
-  };
-
   const [popularFilms, setPopularFilms] = useState([]);
   const [trending, setTrending] = useState([]);
   const [genres, setGenresList] = useState([]);
@@ -43,7 +38,6 @@ const Landing = () => {
   const diaActual = fecha.getDate();
   const mesActual = fecha.getMonth() + 1;
   const añoActual = fecha.getFullYear();
-
   const popularFilmsURL =
     "https://api.themoviedb.org/3/movie/popular?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1";
   const trendingURL =
@@ -102,8 +96,14 @@ const Landing = () => {
     axios
       .get(nextMoviesAPI)
       .then((response) => {
-        const apiData = response.data.results.slice(0, 10);
-        setNextMovies(apiData);
+        const apiData = response.data.results;
+        const onlyWithBackDropImage = apiData
+          .filter(
+            (movie) =>
+              movie.backdrop_path !== "" && movie.backdrop_path !== null
+          )
+          .slice(0, 12);
+        setNextMovies(onlyWithBackDropImage);
       })
       .catch((error) =>
         MySwal.fire({
@@ -121,15 +121,10 @@ const Landing = () => {
       <Row>
         <Col xs={12} lg={7}>
           <h5 className="text-center">Top 6 movies</h5>
-          <Carousel
-            activeIndex={index}
-            onSelect={handleSelect}
-            className="mx-auto"
-            interval={2000}
-          >
+          <Carousel autoplay arrows autoplaySpeed={2500}>
             {popularFilms?.map((film, index) => {
               return (
-                <Carousel.Item key={index}>
+                <div key={index}>
                   <CardJoy
                     sx={{ minHeight: "80vh", cursor: "pointer" }}
                     onClick={() =>
@@ -194,7 +189,7 @@ const Landing = () => {
                       </Row>
                     </CardContentJoy>
                   </CardJoy>
-                </Carousel.Item>
+                </div>
               );
             })}
           </Carousel>
@@ -260,31 +255,185 @@ const Landing = () => {
         </Col>
       </Row>
       <Row style={{ marginTop: "10px" }}>
+      <h5 className="text-center">Upcoming movies.</h5>
         <Container>
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
+              <Carousel
+                className="d-none d-lg-block "
+                autoplay
+                arrows
+                autoplaySpeed={2000}
+                dotPosition="right"
               >
-                Word of the Day
-              </Typography>
-              <Typography variant="h5" component="div">
-                as;dsas;dlk
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                adjective
-              </Typography>
-              <Typography variant="body2">
-                well meaning and kindly.
-                <br />
-                {'"a benevolent smile"'}
-              </Typography>
+                {[
+                  [0, 3],
+                  [3, 6],
+                  [6, 9],
+                  [9, 12],
+                ].map((slide, index) => (
+                  <div key={index}>
+                    <Row>
+                      {nextMovies
+                        .slice(slide[0], slide[1])
+                        .map((movie, index) => (
+                          <Col
+                            xs={4}
+                            className="d-flex align-items-center"
+                            key={index}
+                          >
+                            <CardJoy
+                              variant="outlined"
+                              onClick={() =>
+                                navigate(`/movies/details?movieID=${movie.id}`)
+                              }
+                              style={{ cursor: "pointer" }}
+                              sx={{ width: "100%" }}
+                            >
+                              <CardOverflow>
+                                <AspectRatio ratio="2">
+                                  <img
+                                    src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                                    srcSet={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                                    loading="lazy"
+                                    alt={movie.title}
+                                  />
+                                </AspectRatio>
+                              </CardOverflow>
+                              <Typography
+                                level="h3"
+                                sx={{
+                                  fontSize: "md",
+                                  whiteSpace: "nowrap",
+                                  textOverflow: "ellipsis",
+                                  overflow: "hidden",
+                                  mt: 2,
+                                }}
+                              >
+                                {movie.title}
+                              </Typography>
+                              <CardOverflow
+                                variant="soft"
+                                sx={{
+                                  display: "flex",
+                                  gap: 1.5,
+                                  py: 1.5,
+                                  px: "var(--Card-padding)",
+                                  bgcolor: "#212529",
+                                }}
+                              >
+                                <Typography
+                                  level="h3"
+                                  style={{
+                                    fontWeight: "md",
+                                    color: "white",
+                                  }}
+                                >
+                                  Release date:
+                                </Typography>
+                                <Divider orientation="vertical" />
+                                <Typography
+                                  level="body3"
+                                  sx={{ fontWeight: "md", color: "white" }}
+                                >
+                                  {movie.release_date}
+                                </Typography>
+                              </CardOverflow>
+                            </CardJoy>
+                          </Col>
+                        ))}
+                    </Row>
+                  </div>
+                ))}
+              </Carousel>
+              <Carousel
+                className="d-xs-block d-lg-none "
+                autoplay
+                arrows
+                autoplaySpeed={2000}
+                dotPosition="right"
+              >
+                {[
+                  [0, 2],
+                  [2, 4],
+                  [4, 6],
+                  [6, 8],
+                  [8, 10],
+                  [10, 12],
+                ].map((slide, index) => (
+                  <div key={index}>
+                    <Row>
+                      {nextMovies
+                        .slice(slide[0], slide[1])
+                        .map((movie, index) => (
+                          <Col
+                            xs={6}
+                            className="d-flex align-items-center"
+                            key={index}
+                          >
+                            <CardJoy
+                              variant="outlined"
+                              onClick={() =>
+                                navigate(`/movies/details?movieID=${movie.id}`)
+                              }
+                              style={{ cursor: "pointer" }}
+                              sx={{ width: "100%" }}
+                            >
+                              <CardOverflow>
+                                <AspectRatio ratio="2">
+                                  <img
+                                    src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                                    srcSet={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                                    loading="lazy"
+                                    alt={movie.title}
+                                  />
+                                </AspectRatio>
+                              </CardOverflow>
+                              <Typography
+                                sx={{
+                                  fontSize: "md",
+                                  whiteSpace: "nowrap",
+                                  textOverflow: "ellipsis",
+                                  overflow: "hidden",
+                                  mt: 2,
+                                }}
+                              >
+                                {movie.title}
+                              </Typography>
+                              <CardOverflow
+                                variant="soft"
+                                sx={{
+                                  display: "flex",
+                                  gap: 1.5,
+                                  py: 1.5,
+                                  px: "var(--Card-padding)",
+                                  bgcolor: "#212529",
+                                }}
+                              >
+                                <Typography
+                                  style={{
+                                    fontWeight: "md",
+                                    color: "white",
+                                  }}
+                                >
+                                  Release date:
+                                </Typography>
+                                <Divider orientation="vertical" />
+                                <Typography
+                                  level="body3"
+                                  sx={{ fontWeight: "md", color: "white" }}
+                                >
+                                  {movie.release_date}
+                                </Typography>
+                              </CardOverflow>
+                            </CardJoy>
+                          </Col>
+                        ))}
+                    </Row>
+                  </div>
+                ))}
+              </Carousel>
             </CardContent>
-            <CardActions>
-              <Button size="small">Learn More</Button>
-            </CardActions>
           </Card>
         </Container>
       </Row>

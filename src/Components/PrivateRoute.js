@@ -3,8 +3,11 @@ import React from "react";
 import Layout from "./Layout";
 import { useAuthStatus } from "../Hooks/useAuthStatus";
 import Loader from "./Loader";
+import Footer from "./Footer";
+import { Container } from "react-bootstrap";
+import NavbarNotLogged from "./NavbarNotLogged";
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children, notLogged }) => {
   const { loggedIn, user } = useAuthStatus();
 
   if (loggedIn === undefined) {
@@ -12,7 +15,16 @@ const PrivateRoute = ({ children }) => {
   } else if (loggedIn === true) {
     return <Layout user={user}>{children}</Layout>;
   } else {
-    return <Navigate replace to="/"></Navigate>;
+    if (notLogged) {
+      return (
+        <>
+          <NavbarNotLogged />
+          <Container>{children}</Container>
+          <Footer />
+        </>
+      );
+    }
+    return <Navigate replace to="/home"></Navigate>;
   }
 };
 export default PrivateRoute;

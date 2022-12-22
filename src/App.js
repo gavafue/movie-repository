@@ -17,17 +17,15 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./css/font.css";
 import SerieDetails from "./Components/SerieDetails";
-
 function App() {
   return (
     <div style={{ backgroundColor: "#00000010" }}>
       <Routes>
-        <Route path="/" exact element={<Login />} />
-
+        <Route path="/login" exact element={<Login />} />
         <Route
           path="/home"
           element={
-            <PrivateRoute>
+            <PrivateRoute notLogged={true}>
               <Landing />
             </PrivateRoute>
           }
@@ -58,7 +56,7 @@ function App() {
             </PrivateRoute>
           }
         />
-         <Route
+        <Route
           path="series/details"
           element={
             <PrivateRoute>
