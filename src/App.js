@@ -4,7 +4,7 @@ import "./css/bootstrap.min.css";
 //Components
 import React from "react";
 import Login from "./Components/Login";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import MoviesList from "./Components/MoviesList";
 import PageNotFound from "./Components/PageNotFound";
 import MovieDetails from "./Components/MovieDetails";
@@ -21,6 +21,7 @@ function App() {
   return (
     <div style={{ backgroundColor: "#00000010" }}>
       <Routes>
+        <Route path="/" exact element={<Navigate to="/home" />} />
         <Route path="/login" exact element={<Login />} />
         <Route
           path="/home"
