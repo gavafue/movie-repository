@@ -133,7 +133,7 @@ const MovieDetails = () => {
                     src={
                       movieDetailsData.poster_path
                         ? `https://image.tmdb.org/t/p/original${movieDetailsData.poster_path}`
-                        : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
+                        : `https://via.placeholder.com/700x1000.png?text=Without+poster+image`
                     }
                     alt={`Poster image from ${movieDetailsData.original_title}`}
                   />
@@ -248,12 +248,12 @@ const MovieDetails = () => {
                               src={
                                 movie.poster_path
                                   ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
-                                  : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
+                                  : `https://via.placeholder.com/700x1000.png?text=Without+poster+image`
                               }
                               srcSet={
                                 movie.poster_path
                                   ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
-                                  : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
+                                  : `https://via.placeholder.com/700x1000.png?text=Without+poster+image`
                               }
                               loading="lazy"
                               alt={movie.title}
