@@ -3,7 +3,6 @@ import "./css/bootstrap.min.css";
 
 //Components
 import React from "react";
-import Login from "./Components/Login";
 import { Routes, Route, Navigate } from "react-router-dom";
 import MoviesList from "./Components/MoviesList";
 import PageNotFound from "./Components/PageNotFound";
@@ -17,12 +16,16 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./css/font.css";
 import SerieDetails from "./Components/SerieDetails";
+import Login2 from "./Components/Login2";
+import Register from "./Components/Register";
+
 function App() {
   return (
     <div style={{ backgroundColor: "#00000010" }}>
       <Routes>
         <Route path="/" exact element={<Navigate to="/home" />} />
-        <Route path="/login" exact element={<Login />} />
+        <Route path="/login" exact element={<Login2 />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/home"
           element={
