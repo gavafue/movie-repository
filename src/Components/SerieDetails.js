@@ -221,7 +221,7 @@ const SerieDetails = () => {
                       type="text/html"
                       width="100%"
                       height="400"
-                      src={`http://www.youtube.com/embed/${videoTrailer.key}`}
+                      src={`https://www.youtube.com/embed/${videoTrailer.key}?origin=${window.location.href}`}
                     ></iframe>
                   </Row>
                 )}

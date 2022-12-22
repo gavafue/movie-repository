@@ -207,7 +207,7 @@ const MovieDetails = () => {
                             type="text/html"
                             width="100%"
                             height="400"
-                            src={`https://www.youtube.com/embed/${videoTrailer.key}`}
+                            src={`https://www.youtube.com/embed/${videoTrailer.key}?origin=${window.location.href}`}
                           ></iframe>
                         </Row>
                       )}
