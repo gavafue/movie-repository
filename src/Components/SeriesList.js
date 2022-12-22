@@ -79,7 +79,12 @@ const SeriesList = () => {
         const apiData = response.data.genres;
         setGenresList(apiData);
       })
-      .catch((error) => console.log(error.message));
+      .catch((error) => MySwal.fire({
+        title: "Oops!",
+        text: `There was an error, please
+   try again in a few moments. Error message:${error}`,
+        icon: "error",
+      }));
     if ((search !== null) & (search !== "")) {
       axios
         // eslint-disable-next-line
@@ -242,9 +247,7 @@ const SeriesList = () => {
         </Row>
         <Row>
           {seriesList.results?.map((oneMovie, index) => {
-            console.log(
-              `https://image.tmdb.org/t/p/original${oneMovie.poster_path}`
-            );
+         
             return (
               <Col
                 xs={6}
