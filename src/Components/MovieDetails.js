@@ -112,7 +112,7 @@ const MovieDetails = () => {
     }
     // eslint-disable-next-line
   }, [movieID, window.location.search]);
-  console.log(movieDetailsData);
+
   return (
     <Container
       className="w-100"
@@ -207,7 +207,7 @@ const MovieDetails = () => {
                             type="text/html"
                             width="100%"
                             height="400"
-                            src={`http://www.youtube.com/embed/${videoTrailer.key}?origin=http://localhost:3000/`}
+                            src={`http://www.youtube.com/embed/${videoTrailer.key}?origin=${window.location.href}`}
                           ></iframe>
                         </Row>
                       )}

@@ -23,8 +23,11 @@ import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import IconButton from "@mui/material/IconButton";
 import InfoIcon from "@mui/icons-material/Info";
+import swAlert from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const Landing = () => {
+  const MySwal = withReactContent(swAlert);
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
 
@@ -50,13 +53,20 @@ const Landing = () => {
     "https://api.themoviedb.org/3/genre/movie/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
   useEffect(() => {
     axios
-      // eslint-disable-next-line
+
       .get(genresAPI)
       .then((response) => {
         const apiData = response.data.genres;
         setGenresList(apiData);
       })
-      .catch((error) => console.log(error.message));
+      .catch((error) =>
+        MySwal.fire({
+          title: "Oops!",
+          text: `There was an error, please
+   try again in a few moments. Error message:${error}`,
+          icon: "error",
+        })
+      );
 
     axios
       .get(popularFilmsURL)
@@ -66,7 +76,14 @@ const Landing = () => {
           .slice(0, 6);
         setPopularFilms(apiData);
       })
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        MySwal.fire({
+          title: "Oops!",
+          text: `There was an error, please
+   try again in a few moments. Error message:${error}`,
+          icon: "error",
+        })
+      );
 
     axios
       .get(trendingURL)
@@ -74,16 +91,30 @@ const Landing = () => {
         const apiData = response.data.results.slice(0, 10);
         setTrending(apiData);
       })
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        MySwal.fire({
+          title: "Oops!",
+          text: `There was an error, please
+   try again in a few moments. Error message:${error}`,
+          icon: "error",
+        })
+      );
     axios
       .get(nextMoviesAPI)
       .then((response) => {
         const apiData = response.data.results.slice(0, 10);
         setNextMovies(apiData);
       })
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        MySwal.fire({
+          title: "Oops!",
+          text: `There was an error, please
+   try again in a few moments. Error message:${error}`,
+          icon: "error",
+        })
+      );
+    // eslint-disable-next-line
   }, []);
-  console.log(nextMovies);
 
   return (
     <Container style={{ marginTop: "10px" }}>

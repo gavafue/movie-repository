@@ -72,7 +72,7 @@ const MoviesList = () => {
     https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=${sortMoviesBy}&include_adult=false&page=${page}&release_date.lte=${año}-${mesActual}-${dia}&with_genres=${genreID}`;
     const searchApi = `
     https://api.themoviedb.org/3/search/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&query=${search}&page=${page}&include_adult=false`;
-    console.log(discoverApi);
+
     axios
       // eslint-disable-next-line
       .get(genresAPI)
@@ -80,7 +80,14 @@ const MoviesList = () => {
         const apiData = response.data.genres;
         setGenresList(apiData);
       })
-      .catch((error) => console.log(error.message));
+      .catch((error) =>
+        MySwal.fire({
+          title: "Oops!",
+          text: `There was an error, please
+   try again in a few moments. Error message:${error}`,
+          icon: "error",
+        })
+      );
 
     if ((search !== null) & (search !== "")) {
       axios
