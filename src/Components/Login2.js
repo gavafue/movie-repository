@@ -56,44 +56,47 @@ const LoginForm = () => {
   const recoverPassword = () => {
     Queue.fire({
       title: "Recover your password",
-      html: <p>Please insert you email adress bellow</p>,
-      input: "text",
+      html: (
+        <TextField
+          margin="normal"
+          fullWidth
+          id="emailRecover"
+          label="Email Address"
+          name="email"
+          required
+        />
+      ),
       currentProgressStep: 0,
-      confirmButtonText: "Acept",
+      confirmButtonText: "Done",
       showLoaderOnConfirm: true,
       allowOutsideClick: false,
       showCancelButton: true,
       showCloseButton: true,
-      preConfirm: (email) => {
-        return sendPasswordResetEmail(auth, email)
-          .then(() => {
-            // Password reset email sent!
-            // ..
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
+      preConfirm: () => {
+        const email = MySwal.getPopup().querySelector("#emailRecover").value;
+        return sendPasswordResetEmail(auth, email).catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          if (errorCode.includes("auth/missing-email")) {
+            MySwal.showValidationMessage(`Please enter an email`);
+          } else if (errorCode.includes("auth/user-not-found")) {
             MySwal.showValidationMessage(
-              `Request failed: ${errorCode}, ${errorMessage}`
+              `This email is not registered on Gabiflix.`
             );
-          });
+          } else if (errorCode.includes("auth/invalid-email")) {
+            MySwal.showValidationMessage(`Please enter a valid email.`);
+          } else {
+            MySwal.showValidationMessage(`Error: ${errorMessage}.`);
+          }
+        });
       },
       showClass: { backdrop: "swal2-noanimation" },
     }).then((result) => {
       if (result.isConfirmed) {
         Queue.fire({
           title: "Done",
-          html: (
-            <>
-              {" "}
-              <Alert
-                message="Email sent"
-                description="An email for recovery password was sent for your mail. Please check the spam inbox."
-                type="success"
-                showIcon
-              />
-            </>
-          ),
+          icon: "success",
+          text: "An email for recovery password was sent for your mail. Please check the spam inbox.",
           currentProgressStep: 1,
         });
       }

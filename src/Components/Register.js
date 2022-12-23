@@ -89,7 +89,6 @@ const Register = () => {
       password: "",
       firstName: "",
       lastName: "",
-      password: "",
       confirmPassword: "",
     },
     validationSchema: validationSchema,
