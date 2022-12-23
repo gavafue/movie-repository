@@ -18,7 +18,10 @@ import swAlert from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useAuthStatus } from "../Hooks/useAuthStatus";
 import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { useNavigate, Navigate } from "react-router-dom";
 import Loader from "./Loader";
 import NavbarNotLogged from "./NavbarNotLogged";
@@ -42,6 +45,60 @@ const LoginForm = () => {
   const MySwal = withReactContent(swAlert);
   const navigate = useNavigate();
 
+  const Queue = MySwal.mixin({
+    progressSteps: ["1", "2"],
+    confirmButtonText: "Next >",
+    // optional classes to avoid backdrop blinking between steps
+    showClass: { backdrop: "swal2-noanimation" },
+    hideClass: { backdrop: "swal2-noanimation" },
+  });
+
+  const recoverPassword = () => {
+    Queue.fire({
+      title: "Recover your password",
+      html: <p>Please insert you email adress bellow</p>,
+      input: "text",
+      currentProgressStep: 0,
+      confirmButtonText: "Acept",
+      showLoaderOnConfirm: true,
+      allowOutsideClick: false,
+      showCancelButton: true,
+      showCloseButton: true,
+      preConfirm: (email) => {
+        return sendPasswordResetEmail(auth, email)
+          .then(() => {
+            // Password reset email sent!
+            // ..
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            MySwal.showValidationMessage(
+              `Request failed: ${errorCode}, ${errorMessage}`
+            );
+          });
+      },
+      showClass: { backdrop: "swal2-noanimation" },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Queue.fire({
+          title: "Done",
+          html: (
+            <>
+              {" "}
+              <Alert
+                message="Email sent"
+                description="An email for recovery password was sent for your mail. Please check the spam inbox."
+                type="success"
+                showIcon
+              />
+            </>
+          ),
+          currentProgressStep: 1,
+        });
+      }
+    });
+  };
   const loginWithCredentials = async (email, password) => {
     try {
       const userLogged = await signInWithEmailAndPassword(
@@ -144,7 +201,7 @@ const LoginForm = () => {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link to="/" variant="body2">
+                <Link onClick={() => recoverPassword()} variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
