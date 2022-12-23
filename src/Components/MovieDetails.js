@@ -44,18 +44,18 @@ const MovieDetails = () => {
         .then((response) => {
           const data = response.data;
           setMovieDetailsData(data);
-          const genresList = data.genres.map((genre) => genre.name);
+          const genresList = data?.genres?.map((genre) => genre?.name);
           setGenres(genresList);
-          const producersList = data.production_companies.map(
-            (productor) => productor.name
+          const producersList = data?.production_companies?.map(
+            (productor) => productor?.name
           );
           setProductors(producersList);
-          const filmedCountriesList = data.production_countries.map(
-            (country) => country.name
+          const filmedCountriesList = data?.production_countries?.map(
+            (country) => country?.name
           );
           setCountries(filmedCountriesList);
-          const spokenLanguagesList = data.spoken_languages.map(
-            (language) => language.english_name
+          const spokenLanguagesList = data?.spoken_languages?.map(
+            (language) => language?.english_name
           );
           setSpokenLanguages(spokenLanguagesList);
         })
@@ -72,8 +72,8 @@ const MovieDetails = () => {
       axios
         .get(similarMoviesAPI)
         .then((response) => {
-          const dataSimilarMovies = response.data.results;
-          setSimilarMovies(dataSimilarMovies.slice(0, 6));
+          const dataSimilarMovies = response?.data?.results;
+          setSimilarMovies(dataSimilarMovies?.slice(0, 6));
         })
         .catch((error) =>
           MySwal.fire({
@@ -88,11 +88,11 @@ const MovieDetails = () => {
       axios
         .get(videosApi)
         .then((response) => {
-          const dataVideos = response.data.results;
+          const dataVideos = response?.data?.results;
 
           if (dataVideos) {
-            const trailer = dataVideos.find(
-              (video) => video.type === "Trailer"
+            const trailer = dataVideos?.find(
+              (video) => video?.type === "Trailer"
             );
             if (trailer) {
               setVideoTrailer(trailer);
@@ -121,7 +121,7 @@ const MovieDetails = () => {
       <Card border="secondary">
         <Card.Header>
           <Card.Title>
-            {movieDetailsData.title} ({movieDetailsData.original_title})
+            {movieDetailsData?.title} ({movieDetailsData?.original_title})
           </Card.Title>
         </Card.Header>
         <Card.Body>
@@ -131,8 +131,8 @@ const MovieDetails = () => {
                 <Card className="bg-dark text-white">
                   <Card.Img
                     src={
-                      movieDetailsData.poster_path
-                        ? `https://image.tmdb.org/t/p/original${movieDetailsData.poster_path}`
+                      movieDetailsData?.poster_path
+                        ? `https://image.tmdb?.org/t/p/original${movieDetailsData.poster_path}`
                         : `https://via.placeholder.com/700x1000.png?text=Without+poster+image`
                     }
                     alt={`Poster image from ${movieDetailsData.original_title}`}
@@ -143,16 +143,16 @@ const MovieDetails = () => {
                 <Row>
                   <Row>
                     <h5>Sinopsis:</h5>
-                    <p>{movieDetailsData.overview}</p>
+                    <p>{movieDetailsData?.overview}</p>
                   </Row>
                   <Row>
                     <Col>
                       <h6>Release Date:</h6>
-                      <p>{movieDetailsData.release_date}</p>
+                      <p>{movieDetailsData?.release_date}</p>
                     </Col>
                     <Col>
                       <h6>Genres:</h6>
-                      <p>{genres.join(", ")}.</p>
+                      <p>{genres?.join(", ")}.</p>
                     </Col>
                   </Row>
                   <Row>
@@ -169,21 +169,21 @@ const MovieDetails = () => {
                     </Col>
                     <Col>
                       <h6>Productor companies:</h6>
-                      <p>{productors.join(", ")}.</p>
+                      <p>{productors?.join(", ")}.</p>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
                       <h6>Countries filmed in:</h6>
-                      <p> {countries.join(", ")}.</p>
+                      <p> {countries?.join(", ")}.</p>
                     </Col>
                     <Col>
                       <h6>Spoken languages:</h6>
-                      <p>{spokenLanguages.join(", ")}.</p>
+                      <p>{spokenLanguages?.join(", ")}.</p>
                     </Col>
                   </Row>
                 </Row>
-                {movieDetailsData.homepage && (
+                {movieDetailsData?.homepage && (
                   <Row>
                     <Row>
                       <Col className="justify-content-center text-center">
@@ -202,12 +202,12 @@ const MovieDetails = () => {
                         <Row>
                           <h5>Trailer:</h5>
                           <iframe
-                            title={videoTrailer.name}
+                            title={videoTrailer?.name}
                             id="player"
                             type="text/html"
                             width="100%"
                             height="400"
-                            src={`https://www.youtube.com/embed/${videoTrailer.key}?origin=${window.location.href}`}
+                            src={`https://www.youtube.com/embed/${videoTrailer?.key}?origin=${window.location.href}`}
                           ></iframe>
                         </Row>
                       )}
@@ -235,8 +235,8 @@ const MovieDetails = () => {
                         <Card2
                           sx={{ minHeight: "240px", cursor: "pointer" }}
                           onClick={() => {
-                            setMovieID(movie.id);
-                            navigate(`/movies/details?movieID=${movie.id}`);
+                            setMovieID(movie?.id);
+                            navigate(`/movies/details?movieID=${movie?.id}`);
                             window.scrollTo({
                               top: 0,
                               behavior: "smooth",
@@ -246,17 +246,17 @@ const MovieDetails = () => {
                           <CardCover2>
                             <img
                               src={
-                                movie.poster_path
-                                  ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+                                movie?.poster_path
+                                  ? `https://image.tmdb.org/t/p/original${movie?.poster_path}`
                                   : `https://via.placeholder.com/700x1000.png?text=Without+poster+image`
                               }
                               srcSet={
-                                movie.poster_path
-                                  ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+                                movie?.poster_path
+                                  ? `https://image.tmdb.org/t/p/original${movie?.poster_path}`
                                   : `https://via.placeholder.com/700x1000.png?text=Without+poster+image`
                               }
                               loading="lazy"
-                              alt={movie.title}
+                              alt={movie?.title}
                             />
                           </CardCover2>
                           <CardCover2
@@ -274,7 +274,7 @@ const MovieDetails = () => {
                             <Typography
                               sx={{ color: "white", fontSize: "14px" }}
                             >
-                              {movie.title}
+                              {movie?.title}
                             </Typography>
                           </CardContent2>
                         </Card2>

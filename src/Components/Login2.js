@@ -23,6 +23,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import Loader from "./Loader";
 import NavbarNotLogged from "./NavbarNotLogged";
 import Footer from "./Footer";
+import { Alert, Space } from "antd";
 
 function Copyright(props) {
   return (
@@ -174,6 +175,14 @@ const LoginForm = () => {
               </Grid>
             </Grid>
           </Box>
+          <Alert
+            message="Informational Notes"
+            description={`If you want to enter and you have not account use this credentials: \n 
+            Email: gabiflix@try.org \n
+            Password: gabiflix`}
+            type="info"
+            showIcon
+          />
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>

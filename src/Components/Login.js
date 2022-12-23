@@ -39,7 +39,6 @@ const Login = () => {
         email,
         password
       );
-      localStorage.setItem("userLogged", JSON.stringify(userLogged.user));
       navigate("/home");
       MySwal.fire({
         icon: "success",

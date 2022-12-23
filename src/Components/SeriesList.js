@@ -90,7 +90,7 @@ const SeriesList = () => {
         // eslint-disable-next-line
         .get(searchApi)
         .then((response) => {
-          const apiData = response.data;
+          const apiData = response?.data;
           setSeriesList(apiData);
         })
         .catch((error) =>
@@ -164,12 +164,12 @@ const SeriesList = () => {
                         key={index + 1}
                         onClick={() => {
                           handleClose();
-                          setGenreID(genre.id);
-                          setSelectedGenre(genre.name);
+                          setGenreID(genre?.id);
+                          setSelectedGenre(genre?.name);
                           setPage(1);
                         }}
                       >
-                        {genre.name}
+                        {genre?.name}
                       </MenuItem>
                     ))}
                   </Menu>
@@ -261,18 +261,18 @@ const SeriesList = () => {
                     <CardMedia
                       component="img"
                       image={
-                        oneMovie.poster_path
-                          ? `https://image.tmdb.org/t/p/original${oneMovie.poster_path}`
+                        oneMovie?.poster_path
+                          ? `https://image.tmdb.org/t/p/original${oneMovie?.poster_path}`
                           : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
                       }
-                      alt={oneMovie.title}
+                      alt={oneMovie?.title}
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h6" component="div">
-                        {oneMovie.title}
+                        {oneMovie?.title}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {oneMovie.overview.substring(0, 80)}...
+                        {oneMovie?.overview?.substring(0, 80)}...
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -281,7 +281,7 @@ const SeriesList = () => {
                       size="small"
                       color="primary"
                       onClick={() =>
-                        navigate(`/series/details?serieID=${oneMovie.id}`)
+                        navigate(`/series/details?serieID=${oneMovie?.id}`)
                       }
                     >
                       View details
@@ -296,7 +296,7 @@ const SeriesList = () => {
           <Pagination
             style={{ padding: "15px" }}
             variant="outlined"
-            count={seriesList.total_pages < 500 ? seriesList.total_pages : 500}
+            count={seriesList.total_pages < 500 ? seriesList?.total_pages : 500}
             page={page}
             onChange={handleChangePages}
           />
@@ -309,10 +309,10 @@ const SeriesList = () => {
           {genresList?.map((genre) => (
             <>
               <ListItem
-                key={genre.id}
+                key={genre?.id}
                 onClick={() => {
-                  setGenreID(genre.id);
-                  setSelectedGenre(genre.name);
+                  setGenreID(genre?.id);
+                  setSelectedGenre(genre?.name);
                   setPage(1);
                   window.scrollTo({
                     top: 0,
@@ -322,7 +322,7 @@ const SeriesList = () => {
                 disablePadding
               >
                 <ListItemButton>
-                  <ListItemText primary={genre.name} />
+                  <ListItemText primary={genre?.name} />
                 </ListItemButton>
               </ListItem>
               <Divider />

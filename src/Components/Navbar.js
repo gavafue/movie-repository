@@ -175,10 +175,10 @@ const Navbar = ({ user }) => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title={`Open settings for ${user.email}`}>
+            <Tooltip title={`Open settings for ${user?.email}`}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar sx={{ bgcolor: "rgb(103, 58, 183)" }}>
-                  {user.email.slice(0, 1)}
+                  {user?.email?.slice(0, 1)}
                 </Avatar>
               </IconButton>
             </Tooltip>

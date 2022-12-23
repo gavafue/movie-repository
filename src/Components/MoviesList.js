@@ -77,7 +77,7 @@ const MoviesList = () => {
       // eslint-disable-next-line
       .get(genresAPI)
       .then((response) => {
-        const apiData = response.data.genres;
+        const apiData = response?.data?.genres;
         setGenresList(apiData);
       })
       .catch((error) =>
@@ -94,7 +94,7 @@ const MoviesList = () => {
         // eslint-disable-next-line
         .get(searchApi)
         .then((response) => {
-          const apiData = response.data;
+          const apiData = response?.data;
           setMoviesList(apiData);
         })
         .catch((error) =>
@@ -134,8 +134,8 @@ const MoviesList = () => {
             <div key={index}>
               <ListItem
                 onClick={() => {
-                  setGenreID(genre.id);
-                  setSelectedGenre(genre.name);
+                  setGenreID(genre?.id);
+                  setSelectedGenre(genre?.name);
                   setPage(1);
                   window.scrollTo({
                     top: 0,
@@ -145,7 +145,7 @@ const MoviesList = () => {
                 disablePadding
               >
                 <ListItemButton>
-                  <ListItemText primary={genre.name} />
+                  <ListItemText primary={genre?.name} />
                 </ListItemButton>
               </ListItem>
               <Divider />
@@ -195,12 +195,12 @@ const MoviesList = () => {
                         key={index + 1}
                         onClick={() => {
                           handleClose();
-                          setGenreID(genre.id);
-                          setSelectedGenre(genre.name);
+                          setGenreID(genre?.id);
+                          setSelectedGenre(genre?.name);
                           setPage(1);
                         }}
                       >
-                        {genre.name}
+                        {genre?.name}
                       </MenuItem>
                     ))}
                   </Menu>
@@ -274,7 +274,7 @@ const MoviesList = () => {
               </Row>
             </Paper>
           </Container>
-          {moviesList.results?.map((oneMovie, index) => {
+          {moviesList?.results?.map((oneMovie, index) => {
             return (
               <Col
                 xs={6}
@@ -288,15 +288,15 @@ const MoviesList = () => {
                     <CardMedia
                       component="img"
                       image={
-                        oneMovie.poster_path
-                          ? `https://image.tmdb.org/t/p/original${oneMovie.poster_path}`
+                        oneMovie?.poster_path
+                          ? `https://image.tmdb.org/t/p/original${oneMovie?.poster_path}`
                           : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
                       }
-                      alt={oneMovie.title}
+                      alt={oneMovie?.title}
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h6" component="div">
-                        {oneMovie.title}
+                        {oneMovie?.title}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {oneMovie?.overview?.substring(0, 80)}...
@@ -308,7 +308,7 @@ const MoviesList = () => {
                       size="small"
                       color="primary"
                       onClick={() =>
-                        navigate(`/movies/details?movieID=${oneMovie.id}`)
+                        navigate(`/movies/details?movieID=${oneMovie?.id}`)
                       }
                     >
                       View details
@@ -323,7 +323,7 @@ const MoviesList = () => {
           <Pagination
             style={{ padding: "15px" }}
             variant="outlined"
-            count={moviesList.total_pages < 500 ? moviesList.total_pages : 500}
+            count={moviesList.total_pages < 500 ? moviesList?.total_pages : 500}
             page={page}
             onChange={handleChangePages}
           />

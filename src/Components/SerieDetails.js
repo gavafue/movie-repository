@@ -134,7 +134,7 @@ const SerieDetails = () => {
                         ? `https://image.tmdb.org/t/p/original${serieDetailsData.poster_path}`
                         : `https://via.placeholder.com/700x1000.png?text=Without+poster+image`
                     }
-                    alt={`Poster image from ${serieDetailsData.original_name}`}
+                    alt={`Poster image from ${serieDetailsData?.original_name}`}
                   />
                 </Card>
               </Col>
@@ -142,16 +142,16 @@ const SerieDetails = () => {
                 <Row>
                   <Row>
                     <h5>Sinopsis:</h5>
-                    <p>{serieDetailsData.overview}</p>
+                    <p>{serieDetailsData?.overview}</p>
                   </Row>
                   <Row>
                     <Col>
                       <h6>First air date:</h6>
-                      <p>{serieDetailsData.first_air_date}</p>
+                      <p>{serieDetailsData?.first_air_date}</p>
                     </Col>
                     <Col>
                       <h6>Genres:</h6>
-                      <p>{genres.join(", ")}.</p>
+                      <p>{genres?.join(", ")}.</p>
                     </Col>
                   </Row>
                   <Row>
@@ -168,40 +168,40 @@ const SerieDetails = () => {
                     </Col>
                     <Col>
                       <h6>Productor companies:</h6>
-                      <p>{productors.join(", ")}.</p>
+                      <p>{productors?.join(", ")}.</p>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
                       <h6>Countries filmed in:</h6>
-                      <p> {countries.join(", ")}.</p>
+                      <p> {countries?.join(", ")}.</p>
                     </Col>
                     <Col>
                       <h6>Spoken languages:</h6>
-                      <p>{spokenLanguages.join(", ")}.</p>
+                      <p>{spokenLanguages?.join(", ")}.</p>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
                       <h6>Number of seasons:</h6>
-                      <p> {serieDetailsData.number_of_seasons}.</p>
+                      <p> {serieDetailsData?.number_of_seasons}.</p>
                     </Col>
                     <Col>
                       <h6>Number of episodes:</h6>
-                      <p>{serieDetailsData.number_of_episodes}.</p>
+                      <p>{serieDetailsData?.number_of_episodes}.</p>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
                       <h6>Status:</h6>
-                      <p>{serieDetailsData.status}.</p>
+                      <p>{serieDetailsData?.status}.</p>
                     </Col>
                   </Row>
                 </Row>
-                {serieDetailsData.homepage && (
+                {serieDetailsData?.homepage && (
                   <Row>
                     <Col className="justify-content-center text-center">
-                      <a href={serieDetailsData.homepage}>
+                      <a href={serieDetailsData?.homepage}>
                         <Button
                           variant="contained"
                           style={{ marginTop: "15px" }}
@@ -216,12 +216,12 @@ const SerieDetails = () => {
                   <Row>
                     <h5>Trailer:</h5>
                     <iframe
-                      title={videoTrailer.name}
+                      title={videoTrailer?.name}
                       id="player"
                       type="text/html"
                       width="100%"
                       height="400"
-                      src={`https://www.youtube.com/embed/${videoTrailer.key}?origin=${window.location.href}`}
+                      src={`https://www.youtube.com/embed/${videoTrailer?.key}?origin=${window.location.href}`}
                     ></iframe>
                   </Row>
                 )}
@@ -246,8 +246,8 @@ const SerieDetails = () => {
                         <Card2
                           sx={{ minHeight: "240px", cursor: "pointer" }}
                           onClick={() => {
-                            setSerieID(serie.id);
-                            navigate(`/series/details?serieID=${serie.id}`);
+                            setSerieID(serie?.id);
+                            navigate(`/series/details?serieID=${serie?.id}`);
                             window.scrollTo({
                               top: 0,
                               behavior: "smooth",
@@ -257,17 +257,17 @@ const SerieDetails = () => {
                           <CardCover2>
                             <img
                               src={
-                                serie.poster_path
-                                  ? `https://image.tmdb.org/t/p/original${serie.poster_path}`
+                                serie?.poster_path
+                                  ? `https://image.tmdb.org/t/p/original${serie?.poster_path}`
                                   : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
                               }
                               srcSet={
-                                serie.poster_path
-                                  ? `https://image.tmdb.org/t/p/original${serie.poster_path}`
+                                serie?.poster_path
+                                  ? `https://image.tmdb.org/t/p/original${serie?.poster_path}`
                                   : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
                               }
                               loading="lazy"
-                              alt={serie.name}
+                              alt={serie?.name}
                             />
                           </CardCover2>
                           <CardCover2
@@ -285,7 +285,7 @@ const SerieDetails = () => {
                             <Typography
                               sx={{ color: "white", fontSize: "14px" }}
                             >
-                              {serie.name}
+                              {serie?.name}
                             </Typography>
                           </CardContent2>
                         </Card2>

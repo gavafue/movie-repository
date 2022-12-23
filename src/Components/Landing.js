@@ -170,7 +170,7 @@ const Landing = () => {
                             style={{ marginBottom: "15px" }}
                           >
                             {film.genre_ids.map((eachGenreId, idx) => {
-                              const thisGenre = genres.find(
+                              const thisGenre = genres?.find(
                                 (genre) => genre.id === eachGenreId
                               );
                               return (
@@ -179,7 +179,7 @@ const Landing = () => {
                                   size="small"
                                   style={{ width: `80px`, margin: "2px" }}
                                   key={idx}
-                                  label={thisGenre.name}
+                                  label={thisGenre?.name}
                                 />
                               );
                             })}
@@ -202,13 +202,13 @@ const Landing = () => {
                   return (
                     <ImageListItem key={index}>
                       <img
-                        src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
-                        srcSet={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
-                        alt={item.title ? item.title : item.name}
+                        src={`https://image.tmdb.org/t/p/original${item?.backdrop_path}`}
+                        srcSet={`https://image.tmdb.org/t/p/original${item?.backdrop_path}`}
+                        alt={item.title ? item?.title : item?.name}
                         loading="lazy"
                       />
                       <ImageListItemBar
-                        title={item.title ? item.title : item.name}
+                        title={item.title ? item?.title : item?.name}
                         subtitle={
                           <Row className="d-flex justify-content-center align-items-center">
                             <Col>
@@ -231,13 +231,13 @@ const Landing = () => {
                           <IconButton
                             sx={{ color: "rgba(255, 255, 255, 0.54)" }}
                             aria-label={`info about ${
-                              item.title ? item.title : item.name
+                              item.title ? item?.title : item?.name
                             }`}
                             onClick={() => {
                               if (item.title) {
-                                navigate(`/movies/details?movieID=${item.id}`);
+                                navigate(`/movies/details?movieID=${item?.id}`);
                               } else {
-                                navigate(`/series/details?serieID=${item.id}`);
+                                navigate(`/series/details?serieID=${item?.id}`);
                               }
                             }}
                           >
@@ -273,8 +273,8 @@ const Landing = () => {
                   <div key={index}>
                     <Row>
                       {nextMovies
-                        .slice(slide[0], slide[1])
-                        .map((movie, index) => (
+                        ?.slice(slide[0], slide[1])
+                        ?.map((movie, index) => (
                           <Col
                             xs={4}
                             className="d-flex align-items-center"
@@ -291,10 +291,10 @@ const Landing = () => {
                               <CardOverflow>
                                 <AspectRatio ratio="2">
                                   <img
-                                    src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                                    srcSet={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                                    src={`https://image.tmdb.org/t/p/original${movie?.backdrop_path}`}
+                                    srcSet={`https://image.tmdb.org/t/p/original${movie?.backdrop_path}`}
                                     loading="lazy"
-                                    alt={movie.title}
+                                    alt={movie?.title}
                                   />
                                 </AspectRatio>
                               </CardOverflow>
@@ -334,7 +334,7 @@ const Landing = () => {
                                   level="body3"
                                   sx={{ fontWeight: "md", color: "white" }}
                                 >
-                                  {movie.release_date}
+                                  {movie?.release_date}
                                 </Typography>
                               </CardOverflow>
                             </CardJoy>
@@ -357,12 +357,12 @@ const Landing = () => {
                   [6, 8],
                   [8, 10],
                   [10, 12],
-                ].map((slide, index) => (
+                ]?.map((slide, index) => (
                   <div key={index}>
                     <Row>
                       {nextMovies
-                        .slice(slide[0], slide[1])
-                        .map((movie, index) => (
+                        ?.slice(slide[0], slide[1])
+                        ?.map((movie, index) => (
                           <Col
                             xs={6}
                             className="d-flex align-items-center"
@@ -371,7 +371,7 @@ const Landing = () => {
                             <CardJoy
                               variant="outlined"
                               onClick={() =>
-                                navigate(`/movies/details?movieID=${movie.id}`)
+                                navigate(`/movies/details?movieID=${movie?.id}`)
                               }
                               style={{ cursor: "pointer" }}
                               sx={{ width: "100%" }}
@@ -379,10 +379,10 @@ const Landing = () => {
                               <CardOverflow>
                                 <AspectRatio ratio="2">
                                   <img
-                                    src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                                    srcSet={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                                    src={`https://image.tmdb.org/t/p/original${movie?.backdrop_path}`}
+                                    srcSet={`https://image.tmdb.org/t/p/original${movie?.backdrop_path}`}
                                     loading="lazy"
-                                    alt={movie.title}
+                                    alt={movie?.title}
                                   />
                                 </AspectRatio>
                               </CardOverflow>
@@ -395,7 +395,7 @@ const Landing = () => {
                                   mt: 2,
                                 }}
                               >
-                                {movie.title}
+                                {movie?.title}
                               </Typography>
                               <CardOverflow
                                 variant="soft"
@@ -420,7 +420,7 @@ const Landing = () => {
                                   level="body3"
                                   sx={{ fontWeight: "md", color: "white" }}
                                 >
-                                  {movie.release_date}
+                                  {movie?.release_date}
                                 </Typography>
                               </CardOverflow>
                             </CardJoy>
