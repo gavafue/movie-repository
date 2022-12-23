@@ -9,7 +9,7 @@ import NavbarNotLogged from "./NavbarNotLogged";
 
 const PrivateRoute = ({ children, notLogged }) => {
   const { loggedIn, user } = useAuthStatus();
-
+  console.log(user);
   if (loggedIn === undefined) {
     return <Loader />;
   } else if (loggedIn === true) {

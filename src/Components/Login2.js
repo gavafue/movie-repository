@@ -23,25 +23,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import Loader from "./Loader";
 import NavbarNotLogged from "./NavbarNotLogged";
 import Footer from "./Footer";
-import { Alert, Space } from "antd";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { Alert } from "antd";
 
 const theme = createTheme();
 
@@ -131,8 +113,6 @@ const LoginForm = () => {
               id="email"
               label="Email Address"
               name="email"
-              autoComplete="email"
-              autoFocus
               value={formik.values.email}
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
@@ -184,7 +164,6 @@ const LoginForm = () => {
             showIcon
           />
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );

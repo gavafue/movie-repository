@@ -26,6 +26,20 @@ import InfoIcon from "@mui/icons-material/Info";
 import swAlert from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Carousel } from "antd";
+const range = (start, stop, step) =>
+  Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step);
+
+const generateArrays = (numberSlides, totalElements) => {
+  let finalArray = [];
+  const slidesPerRow = totalElements / numberSlides;
+  for (let i = 1; i <= numberSlides; i++) {
+    const result = range((i - 1) * slidesPerRow + 1, i * slidesPerRow, 1);
+    finalArray.push(result);
+  }
+  console.log(finalArray);
+};
+
+generateArrays(4, 12);
 const Landing = () => {
   const MySwal = withReactContent(swAlert);
   const navigate = useNavigate();
@@ -270,7 +284,7 @@ const Landing = () => {
                   [6, 9],
                   [9, 12],
                 ].map((slide, index) => (
-                  <div key={index}>
+                  <div key={index} style={{ minHeight: 200 }}>
                     <Row>
                       {nextMovies
                         ?.slice(slide[0], slide[1])

@@ -131,8 +131,8 @@ const MovieDetails = () => {
                 <Card className="bg-dark text-white">
                   <Card.Img
                     src={
-                      movieDetailsData?.poster_path
-                        ? `https://image.tmdb?.org/t/p/original${movieDetailsData.poster_path}`
+                      movieDetailsData.poster_path
+                        ? `https://image.tmdb.org/t/p/original${movieDetailsData.poster_path}`
                         : `https://via.placeholder.com/700x1000.png?text=Without+poster+image`
                     }
                     alt={`Poster image from ${movieDetailsData.original_title}`}

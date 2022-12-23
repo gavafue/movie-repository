@@ -87,7 +87,6 @@ const SerieDetails = () => {
         .get(videosApi)
         .then((response) => {
           const dataVideos = response.data.results;
-
           if (dataVideos) {
             const trailer = dataVideos.find(
               (video) => video.type === "Trailer"

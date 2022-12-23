@@ -120,7 +120,6 @@ const MoviesList = () => {
           })
         );
     }
-
     // eslint-disable-next-line
   }, [genreID, page, search, sortMoviesBy]);
 
