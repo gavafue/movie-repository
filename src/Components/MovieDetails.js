@@ -84,12 +84,10 @@ const MovieDetails = () => {
           })
         );
       //Function to get videos
-
       axios
         .get(videosApi)
         .then((response) => {
           const dataVideos = response?.data?.results;
-
           if (dataVideos) {
             const trailer = dataVideos?.find(
               (video) => video?.type === "Trailer"
@@ -111,7 +109,7 @@ const MovieDetails = () => {
         );
     }
     // eslint-disable-next-line
-  }, [movieID, window.location.search]);
+  }, [movieID, location.search]);
 
   return (
     <Container

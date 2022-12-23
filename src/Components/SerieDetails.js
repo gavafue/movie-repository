@@ -109,7 +109,7 @@ const SerieDetails = () => {
     }
 
     // eslint-disable-next-line
-  }, [serieID, window.location.search]);
+  }, [serieID, location.search]);
 
   return (
     <Container
