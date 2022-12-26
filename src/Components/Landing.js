@@ -66,8 +66,8 @@ const Landing = () => {
       .get(popularFilmsURL)
       .then((response) => {
         const apiData = response.data.results
-          .sort((x, y) => (x.popularity = y.popularity))
-          .slice(0, 6);
+          .sort((x, y) => (x.popularity - y.popularity))
+          .slice(0, 10);
         setPopularFilms(apiData);
       })
       .catch((error) =>
@@ -120,7 +120,7 @@ const Landing = () => {
     <Container style={{ marginTop: "10px" }}>
       <Row>
         <Col xs={12} lg={7}>
-          <h5 className="text-center">Top 6 movies</h5>
+          <h5 className="text-center">Most voted today.</h5>
           <Carousel autoplay autoplaySpeed={2500}>
             {popularFilms?.map((film, index) => {
               return (
