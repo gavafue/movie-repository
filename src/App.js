@@ -8,7 +8,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./css/font.css";
 import PrivateRoute from "./Components/PrivateRoute";
-
+import { useDispatch } from "react-redux";
 //Components
 import MoviesList from "./Components/MoviesList";
 // const MoviesList = React.lazy(() => import("./Components/MoviesList"));
@@ -29,9 +29,15 @@ import Register from "./Components/Register";
 // const LazyRegister = React.lazy(() => import("./Components/Register"));
 import Loader from "./Components/Loader";
 import Favourites from "./Components/Favourites";
+import { setFavorite } from "./redux/Favorites/favouritesSlice";
 // const LazyLoader = React.lazy(() => import("./Components/Loader"));
 
 function App() {
+  const favList = localStorage.getItem("favourites");
+  const dispatch = useDispatch();
+  if (favList) {
+    dispatch(setFavorite(JSON.parse(favList)));
+  }
   return (
     <div style={{ backgroundColor: "#00000010" }}>
       {/* <React.Suspense fallback={<Loader />}> */}

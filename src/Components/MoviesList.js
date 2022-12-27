@@ -32,9 +32,13 @@ import Dropdown from "react-bootstrap/Dropdown";
 import MenuOpenRoundedIcon from "@mui/icons-material/MenuOpenRounded";
 import IconButton from "@mui/joy/IconButton";
 import Favorite from "@mui/icons-material/Favorite";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite } from "../redux/Favorites/favouritesSlice";
 const MySwal = withReactContent(swAlert);
 
-const MoviesList = (props) => {
+const MoviesList = () => {
+  const favorites = useSelector((state) => state.favorites.value);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [genresList, setGenresList] = useState([]);
   const [moviesList, setMoviesList] = useState([]);
@@ -291,14 +295,16 @@ const MoviesList = (props) => {
                       size="sm"
                       variant="solid"
                       className="ms-auto"
-                      onClick={(e) =>
-                        props.addOrRemoveFromFavorites(e, {
-                          id: oneMovie.id,
-                          type: "movie",
-                          title: oneMovie.title,
-                          overviwe: oneMovie.overview,
-                          poster_path: `https://image.tmdb.org/t/p/original${oneMovie?.poster_path}`,
-                        })
+                      onClick={() =>
+                        dispatch(
+                          addFavorite({
+                            id: oneMovie.id,
+                            type: "movie",
+                            title: oneMovie.title,
+                            overview: oneMovie.overview,
+                            poster_path: `https://image.tmdb.org/t/p/original${oneMovie?.poster_path}`,
+                          })
+                        )
                       }
                       sx={{
                         backgroundColor: "#A10E25",

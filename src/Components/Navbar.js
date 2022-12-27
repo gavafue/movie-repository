@@ -15,11 +15,14 @@ import LocalMoviesIcon from "@mui/icons-material/LocalMovies";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import Favourites from "./Favourites";
 
 const Navbar = ({ user }) => {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElFavorites, setAnchorFavorites] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -28,12 +31,18 @@ const Navbar = ({ user }) => {
     setAnchorElUser(event.currentTarget);
   };
 
+  const handleOpenFavorites = (event) => {
+    setAnchorFavorites(event.currentTarget);
+  };
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+  const handleCloseFavorites = () => {
+    setAnchorFavorites(null);
   };
 
   return (
@@ -56,6 +65,7 @@ const Navbar = ({ user }) => {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              cursor: "pointer" 
             }}
           >
             GABIFLIX
@@ -135,6 +145,7 @@ const Navbar = ({ user }) => {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              cursor: "pointer" 
             }}
           >
             GABIFLIX
@@ -173,7 +184,32 @@ const Navbar = ({ user }) => {
             </Button>
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0, display: "flex" }}>
+            <Avatar
+              sx={{ margin: "0 10px 0 10px", cursor: "pointer" }}
+              onClick={(e) => handleOpenFavorites(e)}
+            >
+              <FavoriteIcon />
+            </Avatar>
+            <Menu
+              style={{ width: "450px !important" }}
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElFavorites}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElFavorites)}
+              onClose={handleCloseFavorites}
+            >
+              <Favourites />
+            </Menu>
             <Tooltip title={`Open settings for ${user?.email}`}>
               <IconButton onClick={(e) => handleOpenUserMenu(e)} sx={{ p: 0 }}>
                 <Avatar sx={{ bgcolor: "rgb(103, 58, 183)" }}>
