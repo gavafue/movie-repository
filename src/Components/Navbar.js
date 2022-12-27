@@ -67,7 +67,7 @@ const Navbar = ({ user }) => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleOpenNavMenu}
+              onClick={(e) => handleOpenNavMenu(e)}
               color="inherit"
             >
               <MenuIcon />
@@ -79,7 +79,6 @@ const Navbar = ({ user }) => {
                 vertical: "bottom",
                 horizontal: "left",
               }}
-              keepMounted
               transformOrigin={{
                 vertical: "top",
                 horizontal: "left",
@@ -176,7 +175,7 @@ const Navbar = ({ user }) => {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title={`Open settings for ${user?.email}`}>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton onClick={(e) => handleOpenUserMenu(e)} sx={{ p: 0 }}>
                 <Avatar sx={{ bgcolor: "rgb(103, 58, 183)" }}>
                   {user?.email?.slice(0, 1)}
                 </Avatar>

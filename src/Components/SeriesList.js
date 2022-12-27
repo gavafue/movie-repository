@@ -30,6 +30,8 @@ import MenuOpenRoundedIcon from "@mui/icons-material/MenuOpenRounded";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
+import IconButton from "@mui/joy/IconButton";
+import Favorite from "@mui/icons-material/Favorite";
 const MySwal = withReactContent(swAlert);
 
 const SeriesList = () => {
@@ -79,12 +81,14 @@ const SeriesList = () => {
         const apiData = response.data.genres;
         setGenresList(apiData);
       })
-      .catch((error) => MySwal.fire({
-        title: "Oops!",
-        text: `There was an error, please
+      .catch((error) =>
+        MySwal.fire({
+          title: "Oops!",
+          text: `There was an error, please
    try again in a few moments. Error message:${error}`,
-        icon: "error",
-      }));
+          icon: "error",
+        })
+      );
     if ((search !== null) & (search !== "")) {
       axios
         // eslint-disable-next-line
@@ -117,7 +121,7 @@ const SeriesList = () => {
         );
     }
     // eslint-disable-next-line
-  }, [genreID, page, search,sortSeriesBy]);
+  }, [genreID, page, search, sortSeriesBy]);
 
   return (
     <Row>
@@ -161,7 +165,7 @@ const SeriesList = () => {
                     {" "}
                     {genresList?.map((genre, index) => (
                       <MenuItem
-                        key={index + 1}
+                        key={index}
                         onClick={() => {
                           handleClose();
                           setGenreID(genre?.id);
@@ -246,8 +250,7 @@ const SeriesList = () => {
           </Container>
         </Row>
         <Row>
-          {seriesList.results?.map((oneMovie, index) => {
-         
+          {seriesList.results?.map((oneSerie, index) => {
             return (
               <Col
                 xs={6}
@@ -261,31 +264,47 @@ const SeriesList = () => {
                     <CardMedia
                       component="img"
                       image={
-                        oneMovie?.poster_path
-                          ? `https://image.tmdb.org/t/p/original${oneMovie?.poster_path}`
+                        oneSerie?.poster_path
+                          ? `https://image.tmdb.org/t/p/original${oneSerie?.poster_path}`
                           : `http://via.placeholder.com/700x1000.png?text=Without+poster+image`
                       }
-                      alt={oneMovie?.title}
+                      alt={oneSerie?.name}
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h6" component="div">
-                        {oneMovie?.title}
+                        {oneSerie?.name}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {oneMovie?.overview?.substring(0, 80)}...
+                        {oneSerie?.overview?.substring(0, 80)}...
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions>
+                  <CardActions className="d-flex align-items-center">
                     <Button
                       size="small"
                       color="primary"
                       onClick={() =>
-                        navigate(`/series/details?serieID=${oneMovie?.id}`)
+                        navigate(`/series/details?serieID=${oneSerie?.id}`)
                       }
                     >
                       View details
                     </Button>
+                    <IconButton
+                      aria-label={`${oneSerie.name} add to favorite`}
+                      size="sm"
+                      variant="solid"
+                      className="ms-auto"
+                      sx={{
+                        backgroundColor: "#A10E25",
+                        zIndex: 2,
+                        borderRadius: "50%",
+                        display: "flex",
+                        top: 5,
+                        right: 0,
+                      }}
+                    >
+                      <Favorite style={{ color: "white" }} />
+                    </IconButton>
                   </CardActions>
                 </Card>
               </Col>
@@ -306,8 +325,8 @@ const SeriesList = () => {
         <List>
           {" "}
           <Divider style={{ marginTop: "10px" }} />
-          {genresList?.map((genre) => (
-            <>
+          {genresList?.map((genre, index) => (
+            <div key={index}>
               <ListItem
                 key={genre?.id}
                 onClick={() => {
@@ -326,7 +345,7 @@ const SeriesList = () => {
                 </ListItemButton>
               </ListItem>
               <Divider />
-            </>
+            </div>
           ))}
         </List>
       </Col>

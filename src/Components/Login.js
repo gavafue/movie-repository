@@ -1,37 +1,107 @@
-import React from "react";
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import { Link } from "react-router-dom";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useFormik } from "formik";
+import * as yup from "yup";
 import swAlert from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { useNavigate, Navigate } from "react-router-dom";
-import {
-  Col,
-  Button,
-  Row,
-  Container,
-  Card,
-  Form,
-  Alert,
-} from "react-bootstrap";
-import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { Formik } from "formik";
-import * as yup from "yup";
 import { useAuthStatus } from "../Hooks/useAuthStatus";
+import { auth } from "../firebase";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
+import { useNavigate, Navigate } from "react-router-dom";
 import Loader from "./Loader";
-const MySwal = withReactContent(swAlert);
+import NavbarNotLogged from "./NavbarNotLogged";
+import Footer from "./Footer";
+import { Alert } from "antd";
 
-const Login = () => {
-  const { loggedIn } = useAuthStatus();
+const theme = createTheme();
 
+const validationSchema = yup.object({
+  email: yup
+    .string("Enter your email")
+    .email("Enter a valid email")
+    .required("Email is required"),
+  password: yup
+    .string("Enter your password")
+    .min(8, "Password should be of minimum 8 characters length")
+    .required("Password is required"),
+});
+
+const LoginForm = () => {
+  const MySwal = withReactContent(swAlert);
   const navigate = useNavigate();
-  const loginSchema = yup.object().shape({
-    email: yup
-      .string()
-      .email("Este campo tiene que tener un formato de email")
-      .min(1)
-      .required("Este campo es requerido"),
-    password: yup.string().required("Este campo es requerido"),
+
+  const Queue = MySwal.mixin({
+    progressSteps: ["1", "2"],
+    confirmButtonText: "Next >",
+    // optional classes to avoid backdrop blinking between steps
+    showClass: { backdrop: "swal2-noanimation" },
+    hideClass: { backdrop: "swal2-noanimation" },
   });
 
+  const recoverPassword = () => {
+    Queue.fire({
+      title: "Recover your password",
+      html: (
+        <TextField
+          margin="normal"
+          fullWidth
+          id="emailRecover"
+          label="Email Address"
+          name="email"
+          required
+        />
+      ),
+      currentProgressStep: 0,
+      confirmButtonText: "Done",
+      showLoaderOnConfirm: true,
+      allowOutsideClick: false,
+      showCancelButton: true,
+      showCloseButton: true,
+      preConfirm: () => {
+        const email = MySwal.getPopup().querySelector("#emailRecover").value;
+        return sendPasswordResetEmail(auth, email).catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          if (errorCode.includes("auth/missing-email")) {
+            MySwal.showValidationMessage(`Please enter an email`);
+          } else if (errorCode.includes("auth/user-not-found")) {
+            MySwal.showValidationMessage(
+              `This email is not registered on Gabiflix.`
+            );
+          } else if (errorCode.includes("auth/invalid-email")) {
+            MySwal.showValidationMessage(`Please enter a valid email.`);
+          } else {
+            MySwal.showValidationMessage(`Error: ${errorMessage}.`);
+          }
+        });
+      },
+      showClass: { backdrop: "swal2-noanimation" },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Queue.fire({
+          title: "Done",
+          icon: "success",
+          text: "An email for recovery password was sent for your mail. Please check the spam inbox.",
+          currentProgressStep: 1,
+        });
+      }
+    });
+  };
   const loginWithCredentials = async (email, password) => {
     try {
       const userLogged = await signInWithEmailAndPassword(
@@ -39,11 +109,12 @@ const Login = () => {
         email,
         password
       );
+      localStorage.setItem("userLogged", JSON.stringify(userLogged.user));
       navigate("/home");
       MySwal.fire({
         icon: "success",
         title: "Done!",
-        text: "You now are in!",
+        text: `Hello ${userLogged.user.displayName} you now are in!`,
       });
     } catch (error) {
       MySwal.fire({
@@ -54,126 +125,125 @@ const Login = () => {
     }
   };
 
-  const submitHandler = (values) => {
+  const submitEvent = (values) => {
     const email = values.email;
     const password = values.password;
     loginWithCredentials(email, password);
   };
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => submitEvent(values),
+  });
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Container
+        component="main"
+        maxWidth="xs"
+        style={{ backgroundColor: "white" }}
+      >
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={formik.handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
+            <TextField
+              margin="normal"
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+            />
+            <TextField
+              margin="normal"
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link onClick={() => recoverPassword()} variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link to="/register" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+          <Alert
+            message="Informational Notes"
+            description={`If you want to enter and you have not account use this credentials: \n 
+            Email: gabiflix@try.org \n
+            Password: gabiflix`}
+            type="info"
+            showIcon
+          />
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
+};
+
+const Login2 = () => {
+  const { loggedIn } = useAuthStatus();
   if (loggedIn === undefined) {
     return <Loader />;
   } else if (loggedIn === true) {
     return <Navigate to="/home"></Navigate>;
   } else {
     return (
-      <Formik
-        validationSchema={loginSchema}
-        onSubmit={submitHandler}
-        initialValues={{ email: "", password: "" }}
-      >
-        {({ values, errors, handleChange, handleBlur, handleSubmit }) => (
-          <Container>
-            <Row className="vh-100 justify-content-center align-items-center">
-              <Col md={8} lg={6} xs={12}>
-                <Card className="shadow">
-                  <Card.Body>
-                    <div className="mb-3 mt-md-4">
-                      <h2 className="fw-bold mb-2 text-uppercase ">Log in</h2>
-                      <p className=" mb-5">
-                        Please enter your email and password!
-                      </p>
-                      <div className="mb-3">
-                        <Form onSubmit={handleSubmit}>
-                          <Row className="mb-3">
-                            <Form.Group
-                              className="mb-3"
-                              controlId="formBasicEmail"
-                            >
-                              <Form.Label>Email address</Form.Label>
-                              <Form.Control
-                                type="text"
-                                name="email"
-                                placeholder="Enter email"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.email}
-                                isInvalid={errors.email}
-                                isValid={(values.email !== "") & !errors.email}
-                              />
-                              <Form.Control.Feedback
-                                type="invalid"
-                                style={{ marginTop: "-10px" }}
-                              >
-                                {errors.email}
-                              </Form.Control.Feedback>
-                            </Form.Group>
-                          </Row>
-                          <Row className="mb-3">
-                            <Form.Group controlId="formBasicPassword">
-                              <Form.Label>Password</Form.Label>
-                              <Form.Control
-                                type="password"
-                                name="password"
-                                placeholder="Password"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.password}
-                                isInvalid={errors.password}
-                                isValid={
-                                  (values.password !== "") & !errors.password
-                                }
-                              />
-                              <Form.Control.Feedback
-                                type="invalid"
-                                style={{ marginTop: "-10px" }}
-                              >
-                                {errors.password}
-                              </Form.Control.Feedback>
-                            </Form.Group>
-                          </Row>
-                          <Form.Group
-                            className="mb-3"
-                            controlId="formBasicCheckbox"
-                          >
-                            <p className="small">
-                              <a className="text-primary" href="#!">
-                                Forgot password?
-                              </a>
-                            </p>
-                          </Form.Group>
-                          <div className="d-grid">
-                            <Button variant="primary" type="submit">
-                              Login
-                            </Button>
-                          </div>
-                        </Form>
-                        <div className="mt-3">
-                          <p className="mb-0  text-center">
-                            Don't have an account?{" "}
-                            <a
-                              href="https://github.com/gavafue"
-                              className="text-primary fw-bold"
-                            >
-                              Sign Up
-                            </a>
-                          </p>
-                        </div>
-                        <Alert variant="secondary" className="d-block">
-                          If you want to try the aplication, use the following
-                          credentials: <br />
-                          Email: try@gabiflix.org <br />
-                          Password: gabiflix
-                        </Alert>
-                      </div>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          </Container>
-        )}
-      </Formik>
+      <>
+        <NavbarNotLogged />
+        <LoginForm />
+        <Footer />
+      </>
     );
   }
 };
 
-export default Login;
+export default Login2;

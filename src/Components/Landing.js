@@ -66,7 +66,7 @@ const Landing = () => {
       .get(popularFilmsURL)
       .then((response) => {
         const apiData = response.data.results
-          .sort((x, y) => (x.popularity - y.popularity))
+          .sort((x, y) => x.popularity - y.popularity)
           .slice(0, 10);
         setPopularFilms(apiData);
       })
@@ -102,6 +102,7 @@ const Landing = () => {
             (movie) =>
               movie.backdrop_path !== "" && movie.backdrop_path !== null
           )
+          .sort((a, b) => a.release_date - b.release_date)
           .slice(0, 12);
         setNextMovies(onlyWithBackDropImage);
       })
@@ -417,10 +418,7 @@ const Landing = () => {
                                   Release date:
                                 </Typography>
                                 <Divider orientation="vertical" />
-                                <Typography
-                                  level="body3"
-                                  sx={{ fontWeight: "md", color: "white" }}
-                                >
+                                <Typography sx={{ color: "white" }}>
                                   {movie?.release_date}
                                 </Typography>
                               </CardOverflow>

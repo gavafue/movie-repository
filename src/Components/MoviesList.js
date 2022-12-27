@@ -30,9 +30,11 @@ import { Pagination } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Dropdown from "react-bootstrap/Dropdown";
 import MenuOpenRoundedIcon from "@mui/icons-material/MenuOpenRounded";
+import IconButton from "@mui/joy/IconButton";
+import Favorite from "@mui/icons-material/Favorite";
 const MySwal = withReactContent(swAlert);
 
-const MoviesList = () => {
+const MoviesList = (props) => {
   const navigate = useNavigate();
   const [genresList, setGenresList] = useState([]);
   const [moviesList, setMoviesList] = useState([]);
@@ -283,6 +285,33 @@ const MoviesList = () => {
                 style={{ marginTop: "10px", marginBottom: "10px" }}
               >
                 <Card style={{ maxWidth: 345 }}>
+                  <div>
+                    <IconButton
+                      aria-label={`${oneMovie.name} add to favorite`}
+                      size="sm"
+                      variant="solid"
+                      className="ms-auto"
+                      onClick={(e) =>
+                        props.addOrRemoveFromFavorites(e, {
+                          id: oneMovie.id,
+                          type: "movie",
+                          title: oneMovie.title,
+                          overviwe: oneMovie.overview,
+                          poster_path: `https://image.tmdb.org/t/p/original${oneMovie?.poster_path}`,
+                        })
+                      }
+                      sx={{
+                        backgroundColor: "#A10E25",
+                        zIndex: 2,
+                        borderRadius: "50%",
+                        float: "right",
+                        position: "absolute",
+                        margin: "5px 0 0 5px !important",
+                      }}
+                    >
+                      <Favorite style={{ color: "white" }} />
+                    </IconButton>
+                  </div>
                   <CardActionArea>
                     <CardMedia
                       component="img"
