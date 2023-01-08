@@ -17,8 +17,8 @@ The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
 ## The credentials to login are:
-### `email: challenge@alkemy.org`
-### `password: react`
+### `email: try@gabiflix.org`
+### `password: gabiflix`
 
 Thanks you for watch.
 
