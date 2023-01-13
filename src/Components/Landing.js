@@ -26,7 +26,15 @@ import InfoIcon from "@mui/icons-material/Info";
 import swAlert from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Carousel } from "antd";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
 
+const popoverNotConected = (
+  <Popover id="popover-basic">
+    <Popover.Header as="h3">This is not posible!</Popover.Header>
+    <Popover.Body>You have to sign in before explore Gabiflix!</Popover.Body>
+  </Popover>
+);
 const Landing = () => {
   const MySwal = withReactContent(swAlert);
   const navigate = useNavigate();

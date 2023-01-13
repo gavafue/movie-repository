@@ -27,7 +27,7 @@ import Login from "./Components/Login";
 // const LazyLogin = React.lazy(() => import("./Components/Login"));
 import Register from "./Components/Register";
 // const LazyRegister = React.lazy(() => import("./Components/Register"));
-import Loader from "./Components/Loader";
+// import Loader from "./Components/Loader";
 import Favourites from "./Components/Favourites";
 import { setFavorite } from "./redux/Favorites/favouritesSlice";
 // const LazyLoader = React.lazy(() => import("./Components/Loader"));

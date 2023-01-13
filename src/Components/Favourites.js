@@ -19,36 +19,38 @@ const Favourites = () => {
       <h5 className="text-center">Favorites</h5>
       <List>
         {favorites.length > 0 ? (
-          favorites?.map((movie, idx) => (
+          favorites?.map((item, idx) => (
             <ListItem
               key={idx}
               secondaryAction={
                 <IconButton
                   edge="end"
                   aria-label="delete"
-                  onClick={() => dispatch(removeFavorite(movie))}
+                  onClick={() => dispatch(removeFavorite(item))}
                 >
                   <DeleteIcon />
                 </IconButton>
               }
             >
-              {console.log(movie)}
-              <ListItemAvatar>
+                <ListItemAvatar>
                 <Avatar
                   sx={{ width: 60, height: 60, margin: "5px" }}
-                  src={movie.payload.poster_path}
+                  src={item.payload.poster_path}
                   variant="rounded"
                 ></Avatar>
               </ListItemAvatar>
               <ListItemText
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  if (movie.payload.type === "movie") {
-                    navigate(`/movies/details?movieID=${movie?.payload.id}`);
+                  if (item.payload.type === "movie") {
+                    navigate(`/movies/details?movieID=${item?.payload.id}`);
+                  }
+                  if (item.payload.type === "tv") {
+                    navigate(`/series/details?serieID=${item?.payload.id}`);
                   }
                 }}
                 primary={
-                  movie.payload.title ? movie.payload.title : movie.payload.name
+                  item.payload.title ? item.payload.title : item.payload.name
                 }
               />
             </ListItem>

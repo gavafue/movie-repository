@@ -32,12 +32,11 @@ import Dropdown from "react-bootstrap/Dropdown";
 import MenuOpenRoundedIcon from "@mui/icons-material/MenuOpenRounded";
 import IconButton from "@mui/joy/IconButton";
 import Favorite from "@mui/icons-material/Favorite";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addFavorite } from "../redux/Favorites/favouritesSlice";
 const MySwal = withReactContent(swAlert);
 
 const MoviesList = () => {
-  const favorites = useSelector((state) => state.favorites.value);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [genresList, setGenresList] = useState([]);
@@ -47,10 +46,6 @@ const MoviesList = () => {
   const [page, setPage] = useState(1);
   const [search, setSearchInput] = useState("");
   const [sortMoviesBy, setMoviesSortBy] = useState("popularity.desc");
-  const fecha = new Date();
-  const dia = fecha.getDate();
-  const mesActual = fecha.getMonth() + 1;
-  const año = fecha.getFullYear();
 
   const handleChangePages = (event, value) => {
     setPage(value);
@@ -75,7 +70,7 @@ const MoviesList = () => {
     const genresAPI =
       "https://api.themoviedb.org/3/genre/movie/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
     const discoverApi = `
-    https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=${sortMoviesBy}&include_adult=false&page=${page}&release_date.lte=${año}-${mesActual}-${dia}&with_genres=${genreID}`;
+    https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=${sortMoviesBy}&include_adult=false&page=${page}&with_genres=${genreID}`;
     const searchApi = `
     https://api.themoviedb.org/3/search/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&query=${search}&page=${page}&include_adult=false`;
 

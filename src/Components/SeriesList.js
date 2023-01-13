@@ -32,9 +32,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import IconButton from "@mui/joy/IconButton";
 import Favorite from "@mui/icons-material/Favorite";
+import { useDispatch } from "react-redux";
+import { addFavorite } from "../redux/Favorites/favouritesSlice";
 const MySwal = withReactContent(swAlert);
 
 const SeriesList = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [genresList, setGenresList] = useState([]);
   const [seriesList, setSeriesList] = useState([]);
@@ -43,10 +46,6 @@ const SeriesList = () => {
   const [page, setPage] = useState(1);
   const [search, setSearchInput] = useState("");
   const [sortSeriesBy, setSeriesSortBy] = useState("popularity.desc");
-  const fecha = new Date();
-  const dia = fecha.getDate();
-  const mesActual = fecha.getMonth() + 1;
-  const año = fecha.getFullYear();
 
   const handleChangePages = (event, value) => {
     setPage(value);
@@ -56,7 +55,7 @@ const SeriesList = () => {
     });
   };
   const handleChangeSearchInput = (event) => {
-    setSearchInput(event.target.value);
+    setSearchInput(event.target.value.trim());
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -71,7 +70,7 @@ const SeriesList = () => {
   useEffect(() => {
     const genresAPI =
       "https://api.themoviedb.org/3/genre/tv/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
-    const discoverTVProgramsAPI = `https://api.themoviedb.org/3/discover/tv?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=${sortSeriesBy}&first_air_date.lte=${año}-${mesActual}-${dia}&page=${page}&with_genres=${genreID}&include_null_first_air_dates=false`;
+    const discoverTVProgramsAPI = `https://api.themoviedb.org/3/discover/tv?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&sort_by=${sortSeriesBy}&page=${page}&with_genres=${genreID}&include_null_first_air_dates=false`;
 
     const searchApi = `https://api.themoviedb.org/3/search/tv?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1&query=${search}&include_adult=false`;
     axios
@@ -260,6 +259,36 @@ const SeriesList = () => {
                 style={{ marginTop: "10px", marginBottom: "10px" }}
               >
                 <Card style={{ maxWidth: 345 }}>
+                  <div>
+                    {" "}
+                    <IconButton
+                      aria-label={`${oneSerie.name} add to favorite`}
+                      size="sm"
+                      variant="solid"
+                      className="ms-auto"
+                      onClick={() =>
+                        dispatch(
+                          addFavorite({
+                            id: oneSerie.id,
+                            type: "tv",
+                            title: oneSerie.name,
+                            overview: oneSerie.overview,
+                            poster_path: `https://image.tmdb.org/t/p/original${oneSerie?.poster_path}`,
+                          })
+                        )
+                      }
+                      sx={{
+                        backgroundColor: "#A10E25",
+                        zIndex: 2,
+                        borderRadius: "50%",
+                        float: "right",
+                        position: "absolute",
+                        margin: "5px 0 0 5px !important",
+                      }}
+                    >
+                      <Favorite style={{ color: "white" }} />
+                    </IconButton>
+                  </div>
                   <CardActionArea>
                     <CardMedia
                       component="img"
