@@ -10,6 +10,7 @@ import CardCover2 from "@mui/joy/CardCover";
 import CardContent2 from "@mui/joy/CardContent";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Rating } from "@mui/material";
+import CommentBox from "./CommentBox";
 
 const MovieDetails = () => {
   const MySwal = withReactContent(swAlert);
@@ -282,6 +283,7 @@ const MovieDetails = () => {
                 </Row>
               </Paper>
             </Row>
+            <CommentBox />
           </Container>
         </Card.Body>
       </Card>

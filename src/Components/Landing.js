@@ -50,8 +50,8 @@ const Landing = () => {
     "https://api.themoviedb.org/3/movie/popular?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1";
   const trendingURL =
     "https://api.themoviedb.org/3/trending/all/day?api_key=51b3e2f36ad739cff7692a885496b3f8";
-  const nextMoviesAPI = `https://api.themoviedb.org/3/discover/movie?api_key=51b3e2f36ad739cff7692a885496b3f8&primary_release_date.gte=${añoActual}-${mesActual}-${diaActual}&sort_by=popularity.desc`;
-  const genresAPI =
+  const nextMoviesAPI = `https://api.themoviedb.org/3/movie/upcoming?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US&page=1`
+    const genresAPI =
     "https://api.themoviedb.org/3/genre/movie/list?api_key=51b3e2f36ad739cff7692a885496b3f8&language=en-US";
   useEffect(() => {
     axios
